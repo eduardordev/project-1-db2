@@ -1,0 +1,74 @@
+{
+    "roles":{
+        "admin": {
+            "views": {
+                "management": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "clients": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "home": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "fabrics": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "materials": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "pattern": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "engineering": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "embellish": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "costing": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "quotation": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                },
+                "quickcosting": {
+                    "edit": true,
+                    "view": true,
+                    "create": true,
+                    "delete": true
+                }
+            }
+        }
+    }
+}

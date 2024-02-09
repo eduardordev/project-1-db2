@@ -1,0 +1,10 @@
+.modal {
+  &.fade .modal-dialog {
+    animation-duration: unset;
+    animation-fill-mode: both;
+    animation-name: show;
+  }
+  &.show.modal-long .modal-dialog {
+    transform: translateY(10%);
+  }
+}

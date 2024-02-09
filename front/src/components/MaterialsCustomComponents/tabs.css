@@ -1,0 +1,5 @@
+.active {
+    border-color: blueviolet !important;
+    color: blueviolet !important;
+    font-weight: 800 !important;
+}

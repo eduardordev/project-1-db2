@@ -1,0 +1,15 @@
+#/build
+/node_modules
+package-lock.json
+
+/* Windows trash files */
+Thumbs.db
+
+/* Logs */
+*.log
+
+/* Dark theme specific files */
+ISSUE_TEMPLATE.md
+/Documentation
+/github-assets
+.env

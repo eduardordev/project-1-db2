@@ -1,0 +1,158 @@
+[
+  {
+    "value": "IN",
+    "label": "INTERLINING"
+  },
+  {
+    "value": "2F",
+    "label": "2END_FLEECE"
+  },
+  {
+    "value": "3F",
+    "label": "3ND_FLEECE"
+  },
+  {
+    "value": "FT",
+    "label": "FRENCH_TERRY"
+  },
+  {
+    "value": "I",
+    "label": "INTERLOCK"
+  },
+  {
+    "value": "J",
+    "label": "JERSEY"
+  },
+  {
+    "value": "M",
+    "label": "MESH"
+  },
+  {
+    "value": "MF",
+    "label": "MICRO_FLEECE"
+  },
+  {
+    "value": "MP",
+    "label": "MICRO_PIQUE"
+  },
+  {
+    "value": "PF",
+    "label": "POLAR_FLEECE"
+  },
+  {
+    "value": "R11",
+    "label": "RIB_1X1"
+  },
+  {
+    "value": "R21",
+    "label": "RIB_2X1"
+  },
+  {
+    "value": "R22",
+    "label": "RIB_2X2"
+  },
+  {
+    "value": "T",
+    "label": "THERMAL"
+  },
+  {
+    "value": "W",
+    "label": "WOVEN"
+  },
+  {
+    "value": "CM",
+    "label": "CIRCULAR_MESH"
+  },
+  {
+    "value": "WM",
+    "label": "WARP_MESH"
+  },
+  {
+    "value": "P",
+    "label": "PIQUE"
+  },
+  {
+    "value": "PT",
+    "label": "PLAITED_JERSEY"
+  },
+  {
+    "value": "DK",
+    "label": "DOUBLE_KNIT"
+  },
+  {
+    "value": "CC",
+    "label": "CIRCULAR_CREPE"
+  },
+  {
+    "value": "2FT",
+    "label": "2ND_FRENCH_TERRY"
+  },
+  {
+    "value": "3FT",
+    "label": "3ND_FRENCH_TERRY"
+  },
+  {
+    "value": "PW",
+    "label": "PLAIN_WEAVE"
+  },
+  {
+    "value": "TA",
+    "label": "TAFFETA"
+  },
+  {
+    "value": "PO",
+    "label": "POPLIN"
+  },
+  {
+    "value": "CH",
+    "label": "CHAMBRAY"
+  },
+  {
+    "value": "T",
+    "label": "TASLAN"
+  },
+  {
+    "value": "C",
+    "label": "CANVAS"
+  },
+  {
+    "value": "TW",
+    "label": "TWILL"
+  },
+  {
+    "value": "GA",
+    "label": "GARBARDINE"
+  },
+  {
+    "value": "HE",
+    "label": "HERRINGBONE"
+  },
+  {
+    "value": "SA",
+    "label": "SATIN"
+  },
+  {
+    "value": "OX",
+    "label": "OXFORD"
+  },
+  {
+    "value": "DD",
+    "label": "DOBBY"
+  },
+  {
+    "value": "WC",
+    "label": "WABEN_CREPE"
+  },
+  {
+    "value": "WK",
+    "label": "WARD_KNIT"
+  },
+  {
+    "value": "WAF",
+    "label": "WAFFLE"
+  },
+  {
+    "value": "MI",
+    "label": "MICROFILAMENT"
+  }
+]

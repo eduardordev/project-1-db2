@@ -1,0 +1,44 @@
+.colRight  {
+  overflow: scroll;
+    padding-bottom: 10px;
+    height: 400px;
+    margin-top: -70px;
+}
+.thID{
+  width: 126px;
+}
+.thDESC{
+  width: 400px;
+}
+.tdDESC{
+  word-wrap: break-word;
+  font-size: 12px;
+}
+.tdWidth{
+  width: 100px !important;
+}
+.tdFont{
+  font-size: 16px;
+  
+}
+.id{
+  color: #1d8cf8;
+  font-weight: 600;
+  text-align: center;
+}
+
+.colRight::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  }
+.colRight::-webkit-scrollbar-track {
+  border: 1px solid #1d8cf8;
+  border-radius: 10px;
+  }
+.colRight::-webkit-scrollbar-thumb {
+  background: #1d8cf8;
+  border-radius: 10px;
+  }
+.colRight::-webkit-scrollbar-thumb:hover {
+  background: #1d8cf8;
+  }

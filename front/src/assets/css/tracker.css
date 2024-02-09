@@ -1,0 +1,122 @@
+.bs4-order-tracking {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: #878788;
+    padding-left: 0px;
+    margin-top: 30px;
+    
+}
+
+
+.bs4-order-tracking li {
+    list-style-type: none;
+    font-size: 16px;
+    width: 20%;
+    float: left;
+    position: relative;
+    color: #878788;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.bs4-order-tracking li:first-child:before {
+    margin-left: 15px !important;
+    padding-left: 11px !important;
+    text-align: left !important
+}
+
+.bs4-order-tracking li:last-child:before {
+    margin-right: 5px !important;
+    padding-right: 11px !important;
+    text-align: right !important
+}
+
+.bs4-order-tracking li>div {
+    color: #fff;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    line-height: 29px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 4vh;
+    background: #878788;
+    border-radius: 50%;
+    margin: auto;
+    box-shadow: 0 2px 10px black;
+}
+
+.bs4-order-tracking li:after {
+    content: '';
+    width: 150%;
+    margin-top: 3vh;
+    height: 10px;
+    background: #878788;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 15px;
+    z-index: -1;
+}
+
+.bs4-order-tracking li:first-child:after {
+    left: 50%
+}
+
+.bs4-order-tracking li:last-child:after {
+    left: 0% !important;
+    width: 0% !important
+}
+
+.bs4-order-tracking li.active {
+    font-weight: bold;
+    color: #2884fc
+}
+
+.bs4-order-tracking li.active>div {
+    background: #2884fc
+}
+
+.bs4-order-tracking li.active:after {
+    background: #2884fc
+}
+
+.card-timeline {
+    background-color: #fff;
+    z-index: 0
+}
+
+.messageCombo{
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center !important;
+    text-align: center;
+    
+}
+
+.step{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#poStep{
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+#poStep:hover{
+    transform: scale(1.1);
+    box-shadow: 0 1px 5px black;
+}
+
+.modal{
+    margin-top: 70px;
+}

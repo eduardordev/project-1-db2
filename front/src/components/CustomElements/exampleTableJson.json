@@ -1,0 +1,26 @@
+{
+    "Header":[
+        {"field":"DM","class":"text-center"}
+    ],
+    "Options": [
+        {"option": "can-edit"},
+        {"option": "can-delete"}
+    ],
+    "Data": [
+        {"item":{
+            "DM":"000000001"
+        }},
+        {"item":{
+            "DM":"000000002"
+        }},
+        {"item":{
+            "DM":"000000003"
+        }},
+        {"item":{
+            "DM":"000000004"
+        }},
+        {"item":{
+            "DM":"000000005"
+        }}
+    ]
+}

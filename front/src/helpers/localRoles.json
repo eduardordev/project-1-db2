@@ -1,0 +1,36 @@
+{
+    "admin": {
+        "id": 1,
+        "name": "Administrator",
+        "views": {
+            "home": true,
+            "fabrics": true,
+            "materials": true,
+            "pattern": true,
+            "engineering": true,
+            "embellish": true,
+            "costing": true,
+            "quotation": true,
+            "quickcosting": true,
+            "management": true,
+            "clients": true
+        }
+    },
+    "basic": {
+        "id": 2,
+        "name": "Basic user",
+        "views": {
+            "home": true,
+            "fabrics": true,
+            "materials": true,
+            "pattern": true,
+            "engineering": true,
+            "embellish": true,
+            "costing": true,
+            "quotation": true,
+            "quickcosting": false,
+            "management": false,
+            "clients": false
+        }
+    }
+}

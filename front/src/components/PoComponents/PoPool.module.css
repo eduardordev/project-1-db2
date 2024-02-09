@@ -1,0 +1,40 @@
+.sizeTable {
+  max-height: 100% !important;
+  padding-left: 5px;
+  margin-top: 25px;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.bordered {
+  border-radius: 5px !important;
+  margin-top: 25px !important;
+}
+
+.borderedSmall {
+  border-radius: 5px !important;
+  margin-top: 15px !important;
+  border-left: none;
+  border: 1px solid grey;
+  box-shadow: 1px 1px 5px #888888;
+  padding-top: 10px;
+  font-size: 0.9625rem;
+  line-height: 1.8;
+}
+
+.checkbox {
+  width: 100%;
+  height: 100px;
+  padding-left: 2rem;
+  /*background-color: blueviolet !important;*/
+  /*margin-top: none !important;
+  margin-left: none !important;*/
+}
+
+.checkitem {
+  width: 25px;
+  height: 20px;
+}
