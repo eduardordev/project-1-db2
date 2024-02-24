@@ -7,3 +7,4 @@ client = MongoClient(MONGO_URI)
 db = client.get_database()
 
 user_profile_collection = db['UserProfile']
+invoice_collection = db['Invoices']

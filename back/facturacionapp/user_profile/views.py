@@ -3,6 +3,8 @@ from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 from .models import UserProfile
 from db_connection import user_profile_collection
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import login
 
 @csrf_exempt
 @require_GET
@@ -67,3 +69,18 @@ def delete_user(request, pk):
         return JsonResponse({'message': 'Usuario eliminado exitosamente'}, status=204)
     except UserProfile.DoesNotExist:
         return JsonResponse({'error': 'User not found'}, status=404)
+
+
+@csrf_exempt
+@require_POST
+def signin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if not username or not password:
+            return JsonResponse({'error': 'Invalid data'}, status=400)
+        user = user_profile_collection.find_one({'username': username})
+        if user and check_password(password, user.get('password')):
+            return JsonResponse({'message': 'Inicio de sesión exitoso'})
+        else:
+            return JsonResponse({'error': 'Credenciales incorrectas'}, status=401)
