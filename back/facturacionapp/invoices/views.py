@@ -15,9 +15,7 @@ def get_invoices(request):
             'username': invoice['username'], 
             'name': invoice['name'], 
             'date': invoice['date'],
-            'detail_name': invoice['detail_name'],
-            'quantity': invoice['quantity'],
-            'price': invoice['price'],
+            'infile_detail': invoice['infile_detail'],
             'total': invoice['total']
         } for invoice in invoices]
         return JsonResponse(invoice_list, safe=False)
@@ -29,9 +27,18 @@ def create_invoice(request):
         username = request.POST.get('username')
         name = request.POST.get('name')
         date = request.POST.get('date')
+        producto = request.POST.get('producto')
+        descripcion = request.POST.get('descripcion')
         detail_name = request.POST.get('detail_name')
         quantity = request.POST.get('quantity')
         price = request.POST.get('price')
+        infile_detail = {
+            "producto": producto,
+            "descrpcion": descripcion,
+            "detail_name": detail_name,
+            "quantity": quantity,
+            "price": price
+        }
         total = request.POST.get('total')
         
         # Validar los datos según tus requisitos
@@ -42,9 +49,7 @@ def create_invoice(request):
             username=username, 
             name=name,
             date=date,
-            detail_name=detail_name,
-            quantity=quantity,
-            price=price,
+            infile_detail=infile_detail,
             total=total
         )
         new_invoice.createInvoice()
@@ -63,9 +68,7 @@ def get_invoice(request, pk):
             'username': invoice['username'], 
             'name': invoice['name'], 
             'date': invoice['date'],
-            'detail_name': invoice['detail_name'],
-            'quantity': invoice['quantity'],
-            'price': invoice['price'],
+            'infile_detail': invoice['infile_detail'],
             'total': invoice['total']
         }
         return JsonResponse(invoice_dict)
@@ -82,9 +85,18 @@ def update_invoice(request, pk):
         username = request.POST.get('username')
         name = request.POST.get('name')
         date = request.POST.get('date')
+        producto = request.POST.get('producto')
+        descripcion = request.POST.get('descripcion')
         detail_name = request.POST.get('detail_name')
         quantity = request.POST.get('quantity')
         price = request.POST.get('price')
+        infile_detail = {
+            "producto": producto,
+            "descrpcion": descripcion,
+            "detail_name": detail_name,
+            "quantity": quantity,
+            "price": price
+        }
         total = request.POST.get('total')
 
         # Validar los datos según tus requisitos
@@ -97,9 +109,7 @@ def update_invoice(request, pk):
                 'username': username, 
                 'name': name,
                 'date': date,
-                'detail_name': detail_name,
-                'quantity': quantity, 
-                'price': price,
+                'infile_detail': infile_detail,
                 'total': total
             }}
         )
