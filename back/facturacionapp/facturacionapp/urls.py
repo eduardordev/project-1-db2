@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from user_profile.views import get_users, create_user, user_detail, update_user, delete_user
+from user_profile.views import get_users, create_user, user_detail, update_user, delete_user, signin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('signin/', signin, name='sign_in'),
     path('users/', get_users, name='get_users'),
     path('users/create/', create_user, name='create_user'),
     path('users/<str:pk>/', user_detail, name='user_detail'),#si quiero cambiar a busqyeda por pk int cambiar a <int:pk>
