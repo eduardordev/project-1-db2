@@ -32,13 +32,13 @@ def create_invoice(request):
         detail_name = request.POST.get('detail_name')
         quantity = request.POST.get('quantity')
         price = request.POST.get('price')
-        infile_detail = {
+        infile_detail = [{
             "producto": producto,
             "descrpcion": descripcion,
             "detail_name": detail_name,
             "quantity": quantity,
             "price": price
-        }
+        }]
         total = request.POST.get('total')
         
         # Validar los datos según tus requisitos
@@ -90,13 +90,13 @@ def update_invoice(request, pk):
         detail_name = request.POST.get('detail_name')
         quantity = request.POST.get('quantity')
         price = request.POST.get('price')
-        infile_detail = {
+        infile_detail = [{
             "producto": producto,
             "descrpcion": descripcion,
             "detail_name": detail_name,
             "quantity": quantity,
             "price": price
-        }
+        }]
         total = request.POST.get('total')
 
         # Validar los datos según tus requisitos
