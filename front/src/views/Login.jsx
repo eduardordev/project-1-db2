@@ -93,20 +93,9 @@ class Login extends React.Component {
     handleAuthentication = (event) => {
         event.preventDefault();
         this.SignInUser(this.state.Email, this.state.Password).then(function (response) {
-            const views = [
-                ...response.data.views,
-            ]
-            /*views.push('/managments_boms')
-            views.push('/approve_boms')*/
-            //console.log(response.data)
-            localStorage.setItem('userToken', response.data.token);
-            localStorage.setItem('valid_time', response.data.valid_time);
-            localStorage.setItem('role', response.data.role);
-            localStorage.setItem('user_id', response.data.user_id);
-            localStorage.setItem('user_name', response.data.user_name);
-            localStorage.setItem('user_email', response.data.user_email);
-            localStorage.setItem('permissions', JSON.stringify(response.data.permissions));
-            localStorage.setItem('views', views);
+            localStorage.setItem('_id', response.data.user_id);
+            localStorage.setItem('username', response.data.user_name);
+            localStorage.setItem('email', response.data.user_email);
             this.setState({ _LoggedIn: true });
         }.bind(this)).catch(function (error) {
             let errorMessage = '';
@@ -131,7 +120,6 @@ class Login extends React.Component {
                 <NotificationAlert ref="notificationAlert" />
             </div>
             {this.state._LoggedIn ? this._homeRedirect : ''}
-            {this.state._RecoverPass ? this._passRedirect : ''}
             <div className="content">
                 <Container>
                     <Col className="ml-auto mr-auto" lg="4" md="6">
@@ -174,12 +162,6 @@ class Login extends React.Component {
                                             className="input"
                                         />
                                     </InputGroup>
-                                    <Row>
-                                        <Col sm="6"></Col>
-                                        <Col sm="6">
-                                           <Link to='/auth/recover' className="forgot">Forgot Password?</Link>
-                                        </Col>
-                                    </Row>
                                     <Button type="submit" id="buttonLogin">
                                         Log in
                                     </Button>
