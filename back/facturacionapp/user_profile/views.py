@@ -5,96 +5,107 @@ from .models import UserProfile
 from db_connection import user_profile_collection
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
+from rest_framework.response import Response
+from rest_framework import status
 import json
+
 
 @csrf_exempt
 @require_GET
 def get_users(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         users = user_profile_collection.find()
-        user_list = [{'username': user['username'], 'email': user['email']} for user in users]
+        user_list = [
+            {"username": user["username"], "email": user["email"]} for user in users
+        ]
         return JsonResponse(user_list, safe=False)
+
 
 @csrf_exempt
 @require_POST
 def create_user(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
 
         # Validar los datos según tus requisitos
         if not username or not email:
-            return JsonResponse({'error': 'Invalid data'}, status=400)
+            return JsonResponse({"error": "Invalid data"}, status=400)
 
         new_user = UserProfile(username=username, email=email, password=password)
         new_user.createUser()
-        return JsonResponse({'message': 'Usuario creado exitosamente'}, status=201)
+        return JsonResponse({"message": "Usuario creado exitosamente"}, status=201)
+
 
 @csrf_exempt
 @require_GET
 def user_detail(request, pk):
     try:
-        user = user_profile_collection.find_one({'_id': pk})
+        user = user_profile_collection.find_one({"_id": pk})
     except UserProfile.DoesNotExist:
-        return JsonResponse({'error': 'User not found'}, status=404)
+        return JsonResponse({"error": "User not found"}, status=404)
 
-    if request.method == 'GET':
-        user_dict = {'username': user['username'], 'email': user['email']}
+    if request.method == "GET":
+        user_dict = {"username": user["username"], "email": user["email"]}
         return JsonResponse(user_dict)
+
 
 @csrf_exempt
 @require_POST
 def update_user(request, pk):
     try:
-        user = user_profile_collection.find_one({'_id': pk})
+        user = user_profile_collection.find_one({"_id": pk})
     except UserProfile.DoesNotExist:
-        return JsonResponse({'error': 'User not found'}, status=404)
+        return JsonResponse({"error": "User not found"}, status=404)
 
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
 
         # Validar los datos según tus requisitos
         if not username or not email:
-            return JsonResponse({'error': 'Invalid data'}, status=400)
+            return JsonResponse({"error": "Invalid data"}, status=400)
 
-        user_profile_collection.update_one({'_id': pk}, {'$set': {'username': username, 'email': email}})
-        return JsonResponse({'message': 'Usuario actualizado exitosamente'})
+        user_profile_collection.update_one(
+            {"_id": pk}, {"$set": {"username": username, "email": email}}
+        )
+        return JsonResponse({"message": "Usuario actualizado exitosamente"})
+
 
 @csrf_exempt
 @require_POST
 def delete_user(request, pk):
     try:
-        user_profile_collection.delete_one({'_id': pk})
-        return JsonResponse({'message': 'Usuario eliminado exitosamente'}, status=204)
+        user_profile_collection.delete_one({"_id": pk})
+        return JsonResponse({"message": "Usuario eliminado exitosamente"}, status=204)
     except UserProfile.DoesNotExist:
-        return JsonResponse({'error': 'User not found'}, status=404)
+        return JsonResponse({"error": "User not found"}, status=404)
 
 
 @csrf_exempt
 def signin(request):
-    if request.method == 'OPTIONS':
+    if request.method == "OPTIONS":
         response = JsonResponse({}, status=200)
-        response['allow'] = 'POST, OPTIONS'
+        response["allow"] = "POST, OPTIONS"
         return response
 
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             data = json.loads(request.body)
-            username = data.get('username')
-            print(username)
-            password = data.get('password')
-            print(password)
-            if not username or not password:
-                return JsonResponse({'error': 'Invalid data'}, status=400)
-            
-            user = user_profile_collection.find_one({'username': username})
-            print(user)
-            
-            if user and user.get('password') == password:
-                return JsonResponse({'message': 'Inicio de sesión exitoso'})
+            email = data.get("email")
+            password = data.get("password")
+            if not email or not password:
+                return JsonResponse({"error": "Invalid data"}, status=400)
+            email = user_profile_collection.find_one({"email": email})
+            if email and email.get("password") == password:
+                # Convierte ObjectId a cadena antes de incluirlo en la respuesta JSON
+                email_id_str = str(email.get("_id"))
+                return JsonResponse(
+                    {"id": email_id_str, "username": email.get("username"), "email": email.get("email")},
+                    status=status.HTTP_200_OK,
+                )
             else:
-                return JsonResponse({'error': 'Credenciales incorrectas'}, status=401)
+                return JsonResponse({"error": "Credenciales incorrectas"}, status=401)
         except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)

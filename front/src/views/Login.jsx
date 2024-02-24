@@ -70,49 +70,44 @@ class Login extends React.Component {
         this.setState({ Password: value });
     }
 
-    SignInUser = async (username, password) => {
+    SignInUser = async (email, password) => {
         return await axios.post(
             'http://127.0.0.1:8000/signin/',
             {
-                "username": username,
+                "email": email,
                 "password": password
             },
             { "Content-Type": "application/json" }
         );
     }
 
-    recover = () => {
-        const path = "/recover"
-        this.props.history.push({
-            pathname: path
-        })
-        // views.push('/managments_boms')
-        //    views.push('/approve_boms')
-    }
-
     handleAuthentication = (event) => {
         event.preventDefault();
-        this.SignInUser(this.state.Email, this.state.Password).then(function (response) {
-            localStorage.setItem('_id', response.data.user_id);
-            localStorage.setItem('username', response.data.user_name);
-            localStorage.setItem('email', response.data.user_email);
-            this.setState({ _LoggedIn: true });
-        }.bind(this)).catch(function (error) {
-            let errorMessage = '';
-            if (error.response !== undefined) {
-                for (let [key, value] of Object.entries(error.response.data)) {
-                    errorMessage += `${key}: ${value}\t`;
+        this.SignInUser(this.state.Email, this.state.Password)
+            .then(response => {
+                console.log("id", response.data.id);
+                localStorage.setItem('_id', response.data.id);
+                localStorage.setItem('username', response.data.username);
+                localStorage.setItem('email', response.data.email);
+                this.setState({ _LoggedIn: true }, () => {
+                    console.log(this.state._LoggedIn)
+                    this.props.history.push("/admin/home");
+                });
+            })
+            .catch(error => {
+                let errorMessage = '';
+                if (error.response !== undefined) {
+                    for (let [key, value] of Object.entries(error.response.data)) {
+                        errorMessage += `${key}: ${value}\t`;
+                    }
+                } else {
+                    errorMessage = error.message;
                 }
-            } else {
-                errorMessage = error.message;
-            }
-            this.notify("tr", "warning", errorMessage);
-        }.bind(this));
+                this.notify("tr", "warning", errorMessage);
+            });
     }
 
     _homeRedirect = <Redirect to={{ pathname: "/admin/home" }} />
-
-    _passRedirect = <Redirect to={{ pathname: "/admin/recover" }} />
 
     render() {
         return (<>

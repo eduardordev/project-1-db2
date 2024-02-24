@@ -44,17 +44,15 @@ class Admin extends React.Component {
       activeColor: "primary",
       sidebarMini: true,
       opacity: 0,
-      sidebarOpened: false,
-      userToken: ""
+      sidebarOpened: false
     };
   }
   role = localStorage.getItem('role') || '';
   access = JSON.parse(localStorage.getItem('permissions')) || ''; 
   views = localStorage.getItem('views') || ''; 
   viewsArray = [];
-  userToken = localStorage.getItem('userToken') || '';
-  user_id = localStorage.getItem('user_id') || '0';
-  user_name = localStorage.getItem('user_name') || '';
+  _id = localStorage.getItem('_id') || '0';
+  username = localStorage.getItem('username') || '';
  
   
 
@@ -95,14 +93,6 @@ class Admin extends React.Component {
     this._Routes = this.assembleNewRoutes (routes);
     console.log('rutas', routes)
 
-    if ( this.userToken !== '') {
-      // Check if it comes from login with a token
-      this._isMounted && this.setState({userToken: this.userToken});
-    } else {
-      // Redirect to login page
-      this._isMounted && this.setState({userToken: ""});
-      this._isMounted && this.props.history.push("/auth/login");
-    }
 
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";

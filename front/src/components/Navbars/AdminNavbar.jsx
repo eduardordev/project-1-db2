@@ -50,7 +50,7 @@ class AdminNavbar extends React.Component {
   }
 
   role = localStorage.getItem('role') || '';
-  user_name = localStorage.getItem('user_name') || '';
+  user_name = localStorage.getItem('username') || '';
   
   _LogOutRedirect = <Redirect 
       to={{
@@ -59,6 +59,7 @@ class AdminNavbar extends React.Component {
   />
   componentDidMount() {
     window.addEventListener("resize", this.updateColor);
+    console.log(this.user_name)
 
     if (this.user_name !== '') {
       const name = this.user_name.split(' ');

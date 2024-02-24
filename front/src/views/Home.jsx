@@ -25,11 +25,12 @@ class Home extends React.Component {
     };
   }
 
-  role = localStorage.getItem('role');
-  user_name = localStorage.getItem('user_name');
-  user_email = localStorage.getItem('user_email');
+  user_name = localStorage.getItem('username');
+  user_email = localStorage.getItem('email');
 
   componentDidMount() {
+
+    console.log(this.user_email, this.user_name, "home")
 
     if (this.user_name !== '') {
       const name = this.user_name.split(' ');
@@ -73,7 +74,7 @@ class Home extends React.Component {
                 <Label>
                   <div className="salute">Hi, {this.user_name}</div>
                   <div className="sub">Email: {this.user_email}</div>
-                  <div className="sub">Role: {this.role}</div>
+                 
                   <br />
                   <div>
                     <img src={prod} alt="" className="prodimg" />
