@@ -3,3 +3,4 @@ pymongo
 pytz
 djangorestframework
 dnspython
+django-cors-headers

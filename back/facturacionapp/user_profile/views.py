@@ -5,6 +5,7 @@ from .models import UserProfile
 from db_connection import user_profile_collection
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
+import json
 
 @csrf_exempt
 @require_GET
@@ -72,15 +73,28 @@ def delete_user(request, pk):
 
 
 @csrf_exempt
-@require_POST
 def signin(request):
+    if request.method == 'OPTIONS':
+        response = JsonResponse({}, status=200)
+        response['allow'] = 'POST, OPTIONS'
+        return response
+
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if not username or not password:
-            return JsonResponse({'error': 'Invalid data'}, status=400)
-        user = user_profile_collection.find_one({'username': username})
-        if user and check_password(password, user.get('password')):
-            return JsonResponse({'message': 'Inicio de sesión exitoso'})
-        else:
-            return JsonResponse({'error': 'Credenciales incorrectas'}, status=401)
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            print(username)
+            password = data.get('password')
+            print(password)
+            if not username or not password:
+                return JsonResponse({'error': 'Invalid data'}, status=400)
+            
+            user = user_profile_collection.find_one({'username': username})
+            print(user)
+            
+            if user and user.get('password') == password:
+                return JsonResponse({'message': 'Inicio de sesión exitoso'})
+            else:
+                return JsonResponse({'error': 'Credenciales incorrectas'}, status=401)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
