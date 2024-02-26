@@ -101,8 +101,8 @@ const MainLayout = () => {
 
   const getUserData = () => {
     let data = getSessionData();
-    setUser(data.user_name);
-    setRol(data.role)
+    setUser(data.username);
+    
     setRolLabel(getRolLabel(data.role))
     console.log(data)
   };
@@ -144,7 +144,7 @@ const MainLayout = () => {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
           >
-            {user || "USER"} - ({rolLabel || "Rol"})
+            {user || "USER"}
           </Button>
         </Toolbar>
       </AppBar>
@@ -192,80 +192,10 @@ const MainLayout = () => {
 
           
             <Route path="/users" element={<Users />} />
-          
-          
-            <Route path="/users" element={<Error />} />
-          
-
-          
-            <>
-              <Route path="/inventory/main" element={<MainInventory />} />
-              <Route path="/inventory/main/add" element={<CreateInventoryItem action="add" />} />
-              <Route path="/inventory/main/update/:id" element={<CreateInventoryItem action="update" />} />
-              <Route path="/inventory/main/view/:id" element={<CreateInventoryItem action="view" />} />
-              <Route path="/inventory/detail/add/:part" element={<InventoryDetail action="add" inventory />} />
-              <Route path="/inventory/detail/update/:id" element={<InventoryDetail action="update" />} />
-              <Route path="/inventory/detail/view/:id" element={<InventoryDetail action="view" />} />
-              <Route path="/inventory/quarantine/add" element={<InventoryDetail action="add" quarentine />} />
-              <Route path="/inventory/quarantine/update/:id" element={<InventoryDetail action="update" />} />
-              <Route path="/inventory/quarantine/view/:id" element={<InventoryDetail action="view" />} />
-              <Route path="/inventory/quarantine" element={<QuerantineInventory />} />
-              <Route path="/inventory/repair" element={<RepairInventory />} />
-              <Route path="/inventory/scrap" element={<ScrapInventory />} />
-              <Route path="/inventory/missing_expitarion" element={<MissingExpiration />} />
-              <Route path="/inventory/missing_expitarion/update/:id" element={<InventoryDetail action="update" />} />
-              <Route path="/inventory/missing_expitarion/view/:id" element={<InventoryDetail action="view" />} />
-              <Route path="/inventory/history" element={<History />} />
-              <Route path="/inventory/general_search" element={<GeneralSearch />} />
-            </>
-          
-
-            <Route path="/inventory/*" element={<Error />} />
-          
-
-
-          
-            <Route path="/ships/*" element={<Error />} />
-          
-
-
-          <>
             <Route path="/clients/list" element={<Clients />} />
             <Route path="/clients/create" element={<CreateClients action="add" />} />
             <Route path="/clients/update/:id" element={<CreateClients action="update" />} />
             <Route path="/clients/view/:id" element={<CreateClients action="view" />} />
-            <Route path="/providers/list" element={<Suppliers action="add" />} />
-            <Route path="/providers/add" element={<CreateSupplier action="add" />} />
-            <Route path="/providers/update/:id" element={<CreateSupplier action="update" />} />
-            <Route path="/providers/view/:id" element={<CreateSupplier action="view" />} />
-
-            <Route path="/purchase_order/list" element={<PurchaseOrder />} />
-            <Route path="/purchase_order/create" element={<CreatePurchaseOrder action="add" />} />
-            <Route path="/purchase_order/update/:id" element={<CreatePurchaseOrder action="update" />} />
-            <Route path="/purchase_order/view/:id" element={<CreatePurchaseOrder action="view" />} />
-            <Route path="/purchase_order/detail/pending" element={<ReceivedList />} />
-            <Route path="/purchase_order/detail/create/:id" element={<CreatePurchaseOrderDetail action="add" />} />
-            <Route path="/purchase_order/detail/update/:po/:id" element={<CreatePurchaseOrderDetail action="update" />} />
-
-            <Route path="/personnel/list" element={<Personnel />} />
-            <Route path="/personnel/create" element={<CreatePersonnel />} />
-
-
-          </>
-
-          <>
-            <Route path="/clandsu/*" element={<Error />} />
-            <Route path="/clients/*" element={<Error />} />
-            <Route path="/suppliers/*" element={<Error />} />
-
-            <Route path="/purchase_order/*" element={<Error />} />
-
-            <Route path="/invoice/*" element={<Error />} />
-
-            <Route path="/estimation/*" element={<Error />} />
-
-            <Route path="/task/*" element={<Error />} />
-          </>
 
 
         </Routes>

@@ -18,13 +18,21 @@ from django.contrib import admin
 from django.urls import path
 
 from user_profile.views import get_users, create_user, user_detail, update_user, delete_user, signin
+from invoices.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signin/', signin, name='sign_in'),
+
     path('users/', get_users, name='get_users'),
     path('users/create/', create_user, name='create_user'),
     path('users/<str:pk>/', user_detail, name='user_detail'),#si quiero cambiar a busqyeda por pk int cambiar a <int:pk>
     path('users/<str:pk>/update/', update_user, name='update_user'),
     path('users/<str:pk>/delete/', delete_user, name='delete_user'),
+
+    path('invoices/', get_invoices, name='get_invoices'),
+    path('invoice/', get_invoice, name='get_invoice'),
+    path('invoices/create/', create_invoice, name='create_invoices'),
+    path('invoices/<str:pk>/update/', update_invoice, name='update_invoice'),
+    path('invoices/<str:pk>/delete/', delete_invoice, name='delete_invoice'),
 ]

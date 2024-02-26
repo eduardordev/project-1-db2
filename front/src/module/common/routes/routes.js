@@ -43,17 +43,17 @@ const routes = [
   
   {
     type: "collapse",
-    name: "Clientes",
+    name: "Facturas",
     key: "clients",
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [
       {
-        name: "Listado de Clientes",
+        name: "Listado de Facturas",
         key: "clients_list",
         route: LINKS.clients,
       },
       {
-        name: "Crear Cliente",
+        name: "Crear Factura",
         key: "create_client",
         route: LINKS.create_client,
       },
@@ -61,11 +61,11 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Personal",
+    name: "CHARTS",
     key: "personnel",
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [
-      {
+      {//CHARTS
         name: "Listado de Personal",
         key: "personnel_list",
         route: LINKS.employees,
@@ -74,24 +74,6 @@ const routes = [
         name: "Crear Empleado",
         key: "create_employee",
         route: LINKS.create_employee,
-      },
-    ],
-  },
-  {
-    type: "collapse",
-    name: "Proyectos",
-    key: "projects",
-    icon: <Icon fontSize="medium">description</Icon>,
-    collapse: [
-      {
-        name: "Listado de Proyectos",
-        key: "project_list",
-        route: LINKS.projects,
-      },
-      {
-        name: "Crear Proyecto",
-        key: "create_project",
-        route: LINKS.create_project,
       },
     ],
   },
