@@ -33,6 +33,7 @@ const statusCell = (icon, color, text) => {
 
 export const invoiceHeaders = () => {
   return [
+    { Header: "No.", accessor: "id", width: "10%" },
     { Header: "NIT", accessor: "nit", width: "10%" },
     { Header: "Cliente", accessor: "name", width: "15%" },
     { Header: "Fecha", accessor: "date", width: "15%" },
