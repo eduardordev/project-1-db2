@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:8000/api/v1"
+const baseURL = "http://localhost:8000"
 const defaulHeaders = {'Content-Type': 'application/json',}
 
 export const doGet = (route, headers, params) => {

@@ -53,7 +53,7 @@ function Login({ setSession }) {
     let body = { email: email, password: pass };
     signIn(body)
       .then((resp) => {
-        saveSession(resp.data.token, resp.data);
+        saveSession(resp.data);
         window.location.replace("/");
       })
       .catch((err) => {
@@ -114,7 +114,7 @@ function Login({ setSession }) {
                 fullWidth
                 onClick={sendCredentials}
               >
-                Aceptar
+                Acceder
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
@@ -128,7 +128,7 @@ function Login({ setSession }) {
                   fontWeight="medium"
                   textGradient
                 >
-                  Registrate
+                  Registrarse
                 </MDTypography>
               </MDTypography>
             </MDBox>

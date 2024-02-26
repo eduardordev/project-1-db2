@@ -87,7 +87,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'facturacionapp.wsgi.application'
 
 MONGO_USER = 'grupolos3'
-MONGO_PASSWORD = 'pzR4JoyEGSt7gy7M'
+MONGO_PASSWORD = '4v6fBnNvU0kclhA4'
 MONGO_DB_NAME = 'facturacionapp'
 
 # Utiliza las variables de entorno para proteger información sensible

@@ -32,7 +32,7 @@ export const getCurrentRol = () => {
   return JSON.parse(window.localStorage.getItem("data").role);
 };
 
-export const saveSession = (token, data) => {
+export const saveSession = (data) => {
   
   window.localStorage.setItem("isAuthenticated", true);
   window.localStorage.setItem("data", JSON.stringify(data));
@@ -41,11 +41,9 @@ export const saveSession = (token, data) => {
 
 export const signIn = (data) => {
   console.log(data);
-  let route = "/user/signin/";
-  let headers = { "Content-Type": "multipart/form-data" };
-  let formData = new FormData();
-  Object.keys(data).forEach((key) => formData.append(key, data[key]));
-  return doPost(route, formData, headers);
+  let route = "/signin/";
+  let headers = { "Content-Type": "application/json" };
+  return doPost(route, data, headers);
 };
 
 export const signUp = (data) => {
