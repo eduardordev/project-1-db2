@@ -1,21 +1,35 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Node.js
+node_modules/
+npm-debug.log
 
-# dependencies
-/node_modules
-/.pnp
+# Build artifacts
+build/
+dist/
+
+# Dependency directories
+jspm_packages/
+
+# Webpack
+.DS_Store
+.DS_Store?
+*.cache
+*.log
+*.pid
+*.seed
+*.pid.lock
+*.log
+npm-debug.log
+yarn-error.log
+yarn-debug.log*
+yarn.lock
+yarn-integrity
 .pnp.js
 
-# testing
-/coverage
-
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Editor directories
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
