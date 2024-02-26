@@ -33,7 +33,7 @@ import CoverLayout from "../../components/authentication/CoverLayout";
 
 // Images
 import bgImage from "../../assets/images/construction.jpg";
-import consertec from "../../assets/images/consertec.png";
+
 
 import { signIn, saveSession } from "../../Services/authService";
 

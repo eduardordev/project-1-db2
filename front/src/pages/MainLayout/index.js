@@ -80,7 +80,7 @@ const MainLayout = () => {
     transparentSidenav,
     whiteSidenav,
     darkMode,
-    transparentNavbar, 
+    transparentNavbar,
   } = controller;
 
   const open = Boolean(anchorEl);
@@ -129,25 +129,25 @@ const MainLayout = () => {
 
   return (
     <div className="main-layout">
-        <AppBar position="absolute" color="inherit"
-      sx={(theme) => navbar(theme, { transparentNavbar, darkMode })}>
-          <Toolbar  sx={(theme) => navbarContainer(theme)}>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              
-            </Typography>
-            <Button
-              startIcon={<AccountCircleIcon />}
-              color="inherit"
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-            >
-              {user || "USER"} - ({rolLabel || "Rol"})
-            </Button>
-          </Toolbar>
-        </AppBar>
+      <AppBar position="absolute" color="inherit"
+        sx={(theme) => navbar(theme, { transparentNavbar, darkMode })}>
+        <Toolbar sx={(theme) => navbarContainer(theme)}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+
+          </Typography>
+          <Button
+            startIcon={<AccountCircleIcon />}
+            color="inherit"
+            id="basic-button"
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            {user || "USER"} - ({rolLabel || "Rol"})
+          </Button>
+        </Toolbar>
+      </AppBar>
 
       <MenuM
         id="basic-menu"
@@ -158,18 +158,18 @@ const MainLayout = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        { (rol === 'A') && <Link to="/users" ><MenuItem >Administrar Usuarios</MenuItem></Link> }
+        {(rol === 'A') && <Link to="/users" ><MenuItem >Administrar Usuarios</MenuItem></Link>}
         <MenuItem onClick={logOut}>Cerrar Sesion</MenuItem>
       </MenuM>
       <>
         <Sidenav
           color={sidenavColor}
-          brand={
-            (transparentSidenav && !darkMode) || whiteSidenav
-              ? consertec
-              : consertec
-          }
-          //brandName="CONSERTEC ADMIN" 
+          // brand={
+          //   (transparentSidenav && !darkMode) || whiteSidenav
+          //     ? consertec
+          //     : consertec
+          // }
+          brandName="Facturacion App"
           routes={routes}
           onMouseEnter={handleOnMouseEnter}
           onMouseLeave={handleOnMouseLeave}
@@ -190,84 +190,83 @@ const MainLayout = () => {
         <Routes>
           <Route path="/*" element={<Menu />} />
 
-          { [ "A"].includes(rol) &&
+          
             <Route path="/users" element={<Users />} />
-          }
-          { ![ "A"].includes(rol) &&
+          
+          
             <Route path="/users" element={<Error />} />
-          }
+          
 
-          { [ "A", "U", "I"].includes(rol) &&
-              <>
-                <Route path="/inventory/main" element={<MainInventory />} />
-                <Route path="/inventory/main/add" element={<CreateInventoryItem action="add"/>} />
-                <Route path="/inventory/main/update/:id" element={<CreateInventoryItem action="update"/>} />
-                <Route path="/inventory/main/view/:id" element={<CreateInventoryItem action="view"/>} />
-                <Route path="/inventory/detail/add/:part" element={<InventoryDetail action="add" inventory/>} />
-                <Route path="/inventory/detail/update/:id" element={<InventoryDetail action="update"/>} />
-                <Route path="/inventory/detail/view/:id" element={<InventoryDetail action="view"/>} />
-                <Route path="/inventory/quarantine/add" element={<InventoryDetail action="add" quarentine/>} />
-                <Route path="/inventory/quarantine/update/:id" element={<InventoryDetail action="update"/>} />
-                <Route path="/inventory/quarantine/view/:id" element={<InventoryDetail action="view"/>} />
-                <Route path="/inventory/quarantine" element={<QuerantineInventory />} /> 
-                <Route path="/inventory/repair" element={<RepairInventory />} /> 
-                <Route path="/inventory/scrap" element={<ScrapInventory />} />
-                <Route path="/inventory/missing_expitarion" element={<MissingExpiration />} />
-                <Route path="/inventory/missing_expitarion/update/:id" element={<InventoryDetail action="update"/>} />
-                <Route path="/inventory/missing_expitarion/view/:id" element={<InventoryDetail action="view"/>} />
-                <Route path="/inventory/history" element={<History />} />
-                <Route path="/inventory/general_search" element={<GeneralSearch />} />
-              </>
-          }
-          { ![ "A", "U", "I"].includes(rol) &&
+          
+            <>
+              <Route path="/inventory/main" element={<MainInventory />} />
+              <Route path="/inventory/main/add" element={<CreateInventoryItem action="add" />} />
+              <Route path="/inventory/main/update/:id" element={<CreateInventoryItem action="update" />} />
+              <Route path="/inventory/main/view/:id" element={<CreateInventoryItem action="view" />} />
+              <Route path="/inventory/detail/add/:part" element={<InventoryDetail action="add" inventory />} />
+              <Route path="/inventory/detail/update/:id" element={<InventoryDetail action="update" />} />
+              <Route path="/inventory/detail/view/:id" element={<InventoryDetail action="view" />} />
+              <Route path="/inventory/quarantine/add" element={<InventoryDetail action="add" quarentine />} />
+              <Route path="/inventory/quarantine/update/:id" element={<InventoryDetail action="update" />} />
+              <Route path="/inventory/quarantine/view/:id" element={<InventoryDetail action="view" />} />
+              <Route path="/inventory/quarantine" element={<QuerantineInventory />} />
+              <Route path="/inventory/repair" element={<RepairInventory />} />
+              <Route path="/inventory/scrap" element={<ScrapInventory />} />
+              <Route path="/inventory/missing_expitarion" element={<MissingExpiration />} />
+              <Route path="/inventory/missing_expitarion/update/:id" element={<InventoryDetail action="update" />} />
+              <Route path="/inventory/missing_expitarion/view/:id" element={<InventoryDetail action="view" />} />
+              <Route path="/inventory/history" element={<History />} />
+              <Route path="/inventory/general_search" element={<GeneralSearch />} />
+            </>
+          
+
             <Route path="/inventory/*" element={<Error />} />
-          }
           
+
+
           
-          { ![ "A", "U", "S"].includes(rol) &&
             <Route path="/ships/*" element={<Error />} />
-          }
+          
 
-          {[ "A", "U"].includes(rol) &&
-            <>
-              <Route path="/clients/list" element={<Clients />} />
-              <Route path="/clients/create" element={<CreateClients action="add" />} />
-              <Route path="/clients/update/:id" element={<CreateClients action="update" />}/>
-              <Route path="/clients/view/:id"  element={<CreateClients action="view" />}/>
-              <Route path="/providers/list" element={<Suppliers action="add" />}/>
-              <Route path="/providers/add" element={<CreateSupplier action="add" />}/>
-              <Route path="/providers/update/:id" element={<CreateSupplier action="update" />}/>
-              <Route  path="/providers/view/:id" element={<CreateSupplier action="view" />}/>
 
-              <Route path="/purchase_order/list" element={<PurchaseOrder />} />
-              <Route path="/purchase_order/create" element={<CreatePurchaseOrder action="add" />} />
-              <Route path="/purchase_order/update/:id" element={<CreatePurchaseOrder action="update" />} />
-              <Route path="/purchase_order/view/:id" element={<CreatePurchaseOrder action="view" />} />
-              <Route path="/purchase_order/detail/pending" element={<ReceivedList />} />
-              <Route path="/purchase_order/detail/create/:id" element={<CreatePurchaseOrderDetail action="add" />} />
-              <Route path="/purchase_order/detail/update/:po/:id" element={<CreatePurchaseOrderDetail action="update" />} />
+          <>
+            <Route path="/clients/list" element={<Clients />} />
+            <Route path="/clients/create" element={<CreateClients action="add" />} />
+            <Route path="/clients/update/:id" element={<CreateClients action="update" />} />
+            <Route path="/clients/view/:id" element={<CreateClients action="view" />} />
+            <Route path="/providers/list" element={<Suppliers action="add" />} />
+            <Route path="/providers/add" element={<CreateSupplier action="add" />} />
+            <Route path="/providers/update/:id" element={<CreateSupplier action="update" />} />
+            <Route path="/providers/view/:id" element={<CreateSupplier action="view" />} />
 
-              <Route path="/personnel/list" element={<Personnel />} />
-              <Route path="/personnel/create" element={<CreatePersonnel />} />
+            <Route path="/purchase_order/list" element={<PurchaseOrder />} />
+            <Route path="/purchase_order/create" element={<CreatePurchaseOrder action="add" />} />
+            <Route path="/purchase_order/update/:id" element={<CreatePurchaseOrder action="update" />} />
+            <Route path="/purchase_order/view/:id" element={<CreatePurchaseOrder action="view" />} />
+            <Route path="/purchase_order/detail/pending" element={<ReceivedList />} />
+            <Route path="/purchase_order/detail/create/:id" element={<CreatePurchaseOrderDetail action="add" />} />
+            <Route path="/purchase_order/detail/update/:po/:id" element={<CreatePurchaseOrderDetail action="update" />} />
 
-        
-            </>
-          }
-          {![ "A", "U"].includes(rol) &&
-            <>
-              <Route path="/clandsu/*" element={<Error />} />
-              <Route path="/clients/*" element={<Error />} />
-              <Route path="/suppliers/*" element={<Error />}/>
+            <Route path="/personnel/list" element={<Personnel />} />
+            <Route path="/personnel/create" element={<CreatePersonnel />} />
 
-              <Route path="/purchase_order/*" element={<Error />} />
 
-              <Route path="/invoice/*" element={<Error />} />
+          </>
 
-              <Route path="/estimation/*" element={<Error />} />
+          <>
+            <Route path="/clandsu/*" element={<Error />} />
+            <Route path="/clients/*" element={<Error />} />
+            <Route path="/suppliers/*" element={<Error />} />
 
-              <Route path="/task/*" element={<Error />} />
-            </>
-          }
+            <Route path="/purchase_order/*" element={<Error />} />
+
+            <Route path="/invoice/*" element={<Error />} />
+
+            <Route path="/estimation/*" element={<Error />} />
+
+            <Route path="/task/*" element={<Error />} />
+          </>
+
 
         </Routes>
       </MDBox>
