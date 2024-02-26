@@ -31,14 +31,12 @@ const statusCell = (icon, color, text) => {
   );
 };
 
-export const clientHeaders = () => {
+export const invoiceHeaders = () => {
   return [
-    { Header: "No.", accessor: "id", width: "10%" },
-    { Header: "Nombre", accessor: "name", width: "15%" },
-    { Header: "Direccion", accessor: "address", width: "15%" },
-    { Header: "Telefono", accessor: "phone", width: "15%" },
-    { Header: "Email", accessor: "email", width: "20%" },
-    { Header: "Responsable", accessor: "responsable", width: "20%" },
+    { Header: "NIT", accessor: "nit", width: "10%" },
+    { Header: "Cliente", accessor: "name", width: "15%" },
+    { Header: "Fecha", accessor: "date", width: "15%" },
+    { Header: "Total", accessor: "total", width: "15%" },
   ];
 };
 

@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import './ClientList.css';
 
 //Utils
-import { exportClient, getClients } from '../../../Services/ClientService';
+import { exportClient, getInvoices } from '../../../Services/ClientService';
 import { buildData } from '../../../utils/tableData';
-import { clientHeaders } from '../../../utils/tableHeaders';
+import { invoiceHeaders } from '../../../utils/tableHeaders';
 
 //Custom Components
 import DeleteDialog from '../../../components/DeleteDialog';
@@ -43,9 +43,9 @@ const ClientsList = () => {
   }, []);
 
   const loadClients = (page, filter, value) => {
-    getClients(page, filter, value)
+    getInvoices(page, filter, value)
       .then((resp) => {
-        setClients(buildData(resp.data, clientHeaders()));
+        setClients(buildData(resp.data, invoiceHeaders()));
         setCurrentPage(parseInt(resp.data.current_page));
         setTotalPages(resp.data.pages);
         setLoading(false);
@@ -181,7 +181,7 @@ const ClientsList = () => {
   return (
     <div className='client-list-container'>
       <Typography variant='h4' component='div'>
-        Clientes
+        Facturas
       </Typography>
 
       <MDBox my={3}>
@@ -193,7 +193,7 @@ const ClientsList = () => {
         >
           <Link to='/clients/create'>
             <MDButton variant='gradient' color='info'>
-              Agregar Cliente
+              Agregar Factura
             </MDButton>
           </Link>
           <MDBox display='flex'>

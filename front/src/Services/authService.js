@@ -47,8 +47,7 @@ export const signIn = (data) => {
 };
 
 export const signUp = (data) => {
-  let route = "/user/register";
-
+  let route = "/users/create/";
   let formData = new FormData();
   Object.keys(data).forEach((key) => formData.append(key, data[key]));
   return doPost(route, formData);
