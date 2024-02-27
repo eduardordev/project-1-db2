@@ -65,20 +65,10 @@ const routes = [
     key: "personnel",
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [
-      {//CHARTS
-        name: "Listado de Personal",
-        key: "personnel_list",
-        route: LINKS.employees,
-      },
       {
         name: "Mongo Charts",
         key: "mongo_charts",
         route: LINKS.charts
-      },
-      {
-        name: "Crear Empleado",
-        key: "create_employee",
-        route: LINKS.create_employee,
       },
     ],
   },

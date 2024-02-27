@@ -8,7 +8,7 @@ const Charts = () => {
     <Container maxWidth="lg">
       <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
         <Typography variant="h4" gutterBottom>
-          Mongo Charts
+          Estadisticas de Facturacion
         </Typography>
       </Paper>
 
