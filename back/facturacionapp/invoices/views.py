@@ -175,13 +175,14 @@ def get_monthly_sales_of_year(request):
         year_filter = request.GET.get('year')
         if not year_filter:
             return JsonResponse({'error': 'Missing year filter'}, status=400)
+        year_filter = int(year_filter)
         pipeline = [
             {'$project': {
                 'year': {'$year': {'$toDate': '$date'}}, 
                 'month': {'$month': {'$toDate': '$date'}}, 
                 'total': {'$toDecimal': '$total'}
             }}, 
-            {'$match': {'year': 2024}}, 
+            {'$match': {'year': year_filter}}, 
             {'$group': {
                 '_id': {
                     'year': '$year', 
