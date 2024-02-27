@@ -170,3 +170,42 @@ def anular_factura(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+def get_monthly_sales_of_year(request):
+    if request.method == 'GET':
+        year_filter = request.GET.get('year')
+        if not year_filter:
+            return JsonResponse({'error': 'Missing year filter'}, status=400)
+        pipeline = [
+            {'$project': {
+                'year': {'$year': {'$toDate': '$date'}}, 
+                'month': {'$month': {'$toDate': '$date'}}, 
+                'total': {'$toDecimal': '$total'}
+            }}, 
+            {'$match': {'year': 2024}}, 
+            {'$group': {
+                '_id': {
+                    'year': '$year', 
+                    'month': '$month'
+                }, 
+                'sales': {'$sum': '$total'}
+            }}, 
+            {'$project': {
+                '_id': 0, 
+                'year': '$_id.year', 
+                'month': '$_id.month', 
+                'sales': 1
+            }}, 
+            {'$sort': {
+                'year': -1, 
+                'month': 1, 
+                'sales': -1
+            }}
+        ]
+        reports = invoice_collection.aggregate(pipeline)
+        report_list = [{
+            'year': report['year'],
+            'month': report['month'],
+            'sales': report['sales']
+        } for report in reports]
+        
+        return JsonResponse(report_list, safe=False)
