@@ -6,17 +6,18 @@ from bson import json_util
 
 fake = Faker()
 
-productList = ['Ventilador','Tarjeta Grafica' , 'Mouse', 'Monitor', 'Case', 'Pasta Térmica']
+productList = ['Ventilador','Tarjeta Grafica' , 'Mouse', 'Monitor', 'Case', 'Pasta Termica','Laptop', 'Procesador','Audifonos']
 
 def generate_dataset_and_save(num_records=50000, output_json='output.json', output_bson='output.bson'):
     dataset = []
 
     for _ in range(num_records):
+        num_details = random.randint(1, 5)
         record = {
             'nit': fake.random_int(min=100000000, max=999999999),
             'name': fake.company(),
             'date': fake.date_between(start_date='-30d', end_date='today').isoformat(),
-            'infile_detail': generate_infile_details(),
+            'infile_detail': generate_infile_details(num_details),
             'total': round(random.uniform(100.0, 10000.0), 2),
         }
         dataset.append(record)
@@ -31,21 +32,19 @@ def generate_dataset_and_save(num_records=50000, output_json='output.json', outp
 
     return dataset
 
-def generate_infile_details():
-    num_details = random.randint(1, 5)
+def generate_infile_details(num_details):
     details = []
     for _ in range(num_details):
         detail = {
             'producto' :  fake.random_element(productList),
             'descripcion' : fake.catch_phrase(),
             'detail_name': fake.text(),
-            'quantity': random.randint(1, 10),
-            'price': round(random.uniform(10.0, 100.0), 2),
+            'quantity': random.randint(1, 100),
+            'price': round(random.uniform(10.0, 100000.0), 2),
         }
         details.append(detail)
 
     return details
-
 # Ejemplo de uso
 if __name__ == "__main__":
     num_records = 50000

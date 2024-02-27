@@ -71,6 +71,11 @@ const routes = [
         route: LINKS.employees,
       },
       {
+        name: "Mongo Charts",
+        key: "mongo_charts",
+        route: LINKS.charts
+      },
+      {
         name: "Crear Empleado",
         key: "create_employee",
         route: LINKS.create_employee,
