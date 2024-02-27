@@ -53,10 +53,20 @@ export const getClientList = () => {
 }
 
 export const deleteClient = (id) => {
-    let route = "/client/".concat(id)
+    let route = "/invoices/".concat(id).concat("/delete/")
     
     return doDelete(route)
 }
+
+export const anularFactura = (id) => {
+    let route = "/invoices/anular/"
+    
+    let formData = new FormData();
+    formData.append('id', id);
+    
+    return doPost(route, formData);
+}
+
 
 export const updateClient = (data, id) => {
     let route = "/client/".concat(id).concat("/")

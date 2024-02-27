@@ -14,7 +14,7 @@ from rest_framework.permissions import AllowAny
 def get_invoices(request):
     if request.method == 'GET':
         status_filter = request.GET.get('status')
-        
+
         if status_filter and status_filter in ['VIG', 'ANU']:
             invoices = invoice_collection.find({'status': status_filter})
         else:
@@ -149,4 +149,24 @@ def delete_invoice(request, pk):
         return JsonResponse({'message': 'Factura eliminada exitosamente'}, status=204)
     except Invoices.DoesNotExist:
         return JsonResponse({'error': 'Invoice not found'}, status=404)
+    
+
+@csrf_exempt
+@require_POST
+def anular_factura(request):
+    try:
+        object_id = ObjectId(request.POST.get('id', ''))
+        invoice = invoice_collection.find_one({'_id': object_id})
+        if invoice is None:
+            return JsonResponse({'error': 'Invoice not found'}, status=404)
+
+        # Actualizar el estado de la factura a "ANU"
+        invoice_collection.update_one(
+            {'_id': object_id},
+            {'$set': {'status': 'ANU'}}
+        )
+
+        return JsonResponse({'message': 'Factura Anulada Exitosamente!'})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 

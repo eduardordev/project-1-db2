@@ -32,10 +32,10 @@ import { deleteClient } from '../../../Services/ClientService';
 import { saveAs } from 'file-saver';
 
 const ClientsList = (sts) => {
-  const [clients, setClients] = useState({});
+  const [factura, setFactura] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
-  const [clientToDelete, setClientToDelete] = useState();
+  const [invoiceToDelete, setInvoiceToDelete] = useState();
   const [openDeteleDialog, setOpenDeleteDialog] = React.useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const ClientsList = (sts) => {
   const [initialLoad, setInitialLoad] = useState(true);
 
   useEffect(() => {
-    setClients({})
+    setFactura({})
     setLoading(true)
     loadClients(1);
   }, [sts]);
@@ -52,7 +52,7 @@ const ClientsList = (sts) => {
     console.log(sts)
     getInvoices(page, filter, value, sts.sts)
       .then((resp) => {
-        setClients(buildData(resp.data, invoiceHeaders()));
+        setFactura(buildData(resp.data, invoiceHeaders()));
         setCurrentPage(parseInt(resp.data.current_page));
         setTotalPages(resp.data.pages);
         setLoading(false);
@@ -65,9 +65,15 @@ const ClientsList = (sts) => {
 
   //Actions
   const deleteRegister = (client) => {
-    setClientToDelete(client);
+    setInvoiceToDelete(client);
     setOpenDeleteDialog(true);
   };
+
+  const anular = (invoice) => {
+    setInvoiceToDelete(invoice);
+    setOpenDeleteDialog(true);
+  };
+
   const editRegister = (client) => {
     navigate(`/invoices/update/${client.id}`);
   };
@@ -80,7 +86,18 @@ const ClientsList = (sts) => {
     setOpenDeleteDialog(false);
   };
   const successDeleteDialog = () => {
-    deleteClient(clientToDelete.id)
+    deleteClient(invoiceToDelete.id)
+      .then((resp) => {
+        loadClients(currentPage, filter, valueFilter);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    setOpenDeleteDialog(false);
+  };
+
+  const successAnulationDialog = () => {
+    deleteClient(invoiceToDelete.id)
       .then((resp) => {
         loadClients(currentPage, filter, valueFilter);
       })
@@ -181,7 +198,7 @@ const ClientsList = (sts) => {
   const exportCSV = () => {
     exportClient().then(({ data }) => {
       let blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
-      saveAs(blob, 'Clients.csv');
+      saveAs(blob, 'factura.csv');
     });
   };
 
@@ -208,7 +225,7 @@ const ClientsList = (sts) => {
           alignItems='flex-start'
           mb={2}
         >
-          <Link to='/clients/create'>
+          <Link to='/factura/create'>
             <MDButton variant='gradient' color='info'>
               Agregar Factura
             </MDButton>
@@ -232,7 +249,7 @@ const ClientsList = (sts) => {
           </MDBox>
         </MDBox>
         <Card>
-          {clients.rows !== undefined && clients.rows.length > 0 && (
+          {factura.rows !== undefined && factura.rows.length > 0 && (
             <>
               <DataTable
                 handleSearch={handleSearch}
@@ -241,9 +258,9 @@ const ClientsList = (sts) => {
                 useEdit
                 useDelete
                 editAction={editRegister}
-                deleteAction={deleteRegister}
+                deleteAction={sts.sts === 'VIG' ? anular :deleteRegister}
                 viewAction={viewRegister}
-                table={clients}
+                table={factura}
                 showTotalEntries={false}
                 entriesPerPage={false}
                 canSearch
@@ -271,7 +288,7 @@ const ClientsList = (sts) => {
               <CircularProgress color='info' size={80} />
             </Box>
           )}
-          {clients.rows !== undefined && clients.rows.length === 0 && (
+          {factura.rows !== undefined && factura.rows.length === 0 && (
             <Typography variant='h4' component='div' sx={{ margin: '100px' }}>
               No Existen registros
             </Typography>
@@ -288,8 +305,8 @@ const ClientsList = (sts) => {
 
       <DeleteDialog
         open={openDeteleDialog}
-        nameToDelete={clientToDelete != null ? clientToDelete.name : ''}
-        successCalback={successDeleteDialog}
+        nameToDelete={invoiceToDelete != null ? invoiceToDelete.name : ''}
+        successCalback={sts.sts === 'VIG' ? successAnulationDialog : successDeleteDialog}
         cancelCallback={closeDeleteDialog}
       />
     </div>

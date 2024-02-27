@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from user_profile.views import get_users, create_user, user_detail, update_user, delete_user, signin
+from user_profile.views import *
 from invoices.views import *
 
 urlpatterns = [
@@ -35,4 +35,5 @@ urlpatterns = [
     path('invoices/create/', create_invoice, name='create_invoices'),
     path('invoices/<str:pk>/update/', update_invoice, name='update_invoice'),
     path('invoices/<str:pk>/delete/', delete_invoice, name='delete_invoice'),
+    path('invoices/anular/', anular_factura, name='anular_factura'),
 ]
