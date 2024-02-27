@@ -65,11 +65,6 @@ const routes = [
     key: "personnel",
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [
-      {//CHARTS
-        name: "Listado de Personal",
-        key: "personnel_list",
-        route: LINKS.employees,
-      },
       {
         name: "Mongo Charts",
         key: "mongo_charts",
@@ -90,6 +85,7 @@ const routes = [
         key: "create_employee",
         route: LINKS.create_employee,
       },
+
     ],
   },
 ];
