@@ -6,7 +6,11 @@ from bson import json_util
 
 fake = Faker()
 
-productList = ['Ventilador','Tarjeta Grafica' , 'Mouse', 'Monitor', 'Case', 'Pasta Termica','Laptop', 'Procesador','Audifonos']
+productList = ['Ventilador', 'Tarjeta Grafica', 'Mouse', 'Monitor', 'Case', 'Pasta Termica', 'Laptop', 'Procesador', 'Audifonos', 'Power Bank']
+categories = ['Computo', 'Gaming', 'Estudio', 'Electronicos']
+
+# Lista global de estados posibles
+STATUS_OPTIONS = ['VIG', 'ANU']
 
 def generate_dataset_and_save(num_records=50000, output_json='output.json', output_bson='output.bson'):
     dataset = []
@@ -16,9 +20,10 @@ def generate_dataset_and_save(num_records=50000, output_json='output.json', outp
         record = {
             'nit': fake.random_int(min=100000000, max=999999999),
             'name': fake.company(),
-            'date': fake.date_between(start_date='-30d', end_date='today').isoformat(),
+            'date': fake.date_between(start_date='-365d', end_date='today').isoformat(),
             'infile_detail': generate_infile_details(num_details),
             'total': round(random.uniform(100.0, 10000.0), 2),
+            'status': random.choice(STATUS_OPTIONS),  # Estado por defecto "VIG"
         }
         dataset.append(record)
 
@@ -36,8 +41,9 @@ def generate_infile_details(num_details):
     details = []
     for _ in range(num_details):
         detail = {
-            'producto' :  fake.random_element(productList),
-            'descripcion' : fake.catch_phrase(),
+            'producto': fake.random_element(productList),
+            'category': random.choice(categories),
+            'descripcion': fake.catch_phrase(),
             'detail_name': fake.text(),
             'quantity': random.randint(1, 100),
             'price': round(random.uniform(10.0, 100000.0), 2),
@@ -45,6 +51,7 @@ def generate_infile_details(num_details):
         details.append(detail)
 
     return details
+
 # Ejemplo de uso
 if __name__ == "__main__":
     num_records = 50000

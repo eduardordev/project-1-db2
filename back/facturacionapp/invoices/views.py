@@ -22,7 +22,8 @@ def get_invoices(request):
             'name': invoice['name'], 
             'date': invoice['date'],
             'infile_detail': invoice['infile_detail'],
-            'total': invoice['total']
+            'total': invoice['total'],
+            'status': invoice['status'],
         } for invoice in invoices]
         return JsonResponse(invoice_list, safe=False)
 
@@ -39,6 +40,7 @@ def create_invoice(request):
             date = data.get('date')
             infile_detail = data.get('infile_detail', [])
             total = data.get('total')
+            status= data.get('status')
 
             # Validar los datos según tus requisitos
             if not nit:
@@ -51,7 +53,8 @@ def create_invoice(request):
                 name=name,
                 date=date,
                 infile_detail=infile_detail,
-                total=total
+                total=total,
+                status=status
             )
             new_invoice.createInvoice()
             print(data)
@@ -83,7 +86,8 @@ def get_invoice(request, pk):
                 'name': invoice.get('name', ''), 
                 'date': invoice.get('date', ''),
                 'infile_detail': invoice.get('infile_detail', ''),
-                'total': invoice.get('total', '')
+                'total': invoice.get('total', ''),
+                'status': invoice.get('status','')
             }
             return JsonResponse(invoice_dict)
     except Exception as e:
@@ -113,7 +117,8 @@ def update_invoice(request, pk):
             "quantity": quantity,
             "price": price
         }]
-        total = request.POST.get('total')
+        total = request.POST.get('total'),
+        status = request.POST.get('status'),
 
         # Validar los datos según tus requisitos
         if not nit:
@@ -126,7 +131,8 @@ def update_invoice(request, pk):
                 'name': name,
                 'date': date,
                 'infile_detail': infile_detail,
-                'total': total
+                'total': total,
+                'status': status
             }}
         )
         return JsonResponse({'message': 'Factura actualizada exitosamente'})
