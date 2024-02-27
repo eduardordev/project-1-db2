@@ -14,6 +14,7 @@ def get_invoices(request):
     if request.method == 'GET':
         invoices = invoice_collection.find()
         invoice_list = [{
+            'id': str(invoice['_id']),
             'nit': invoice['nit'], 
             'name': invoice['name'], 
             'date': invoice['date'],
@@ -68,6 +69,7 @@ def get_invoice(request, pk):
 
     if request.method == 'GET':
         invoice_dict = {
+            'id': str(invoice['_id']),
             'nit': invoice['nit'], 
             'name': invoice['name'], 
             'date': invoice['date'],

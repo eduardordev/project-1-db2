@@ -16,9 +16,9 @@ export const getDefaultObject = () => {
     )
 }
 
-export const getClients = (page, filter, value) => {
+export const getInvoices = (page, filter, value) => {
     let filterStr = filter != null ? "&".concat(filter.concat("=".concat(value))) : "";
-    let route = "/clients/?".concat("page=".concat(page)).concat(filterStr);
+    let route = "/invoices/?".concat("page=".concat(page)).concat(filterStr);
     
     return doGet(route);
 }

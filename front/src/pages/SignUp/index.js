@@ -33,6 +33,7 @@ import CoverLayout from "../../components/authentication/CoverLayout";
 
 // Images
 import bgImage from "../../assets/images/construction.jpg";
+import { signUp } from "../../Services/authService";
 
 function SignUp({setSession}) {
 
@@ -54,7 +55,17 @@ function SignUp({setSession}) {
 
   const register = () => {
     console.info(email, pass, name);
-    window.location.replace("/login");
+    let body = { email: email, password: pass, username: name};
+    signUp(body)
+      .then(() => {
+        window.location.replace("/");
+        alert("Usuario Creado Exitosamente!")
+      })
+      .catch((err) => {
+        console.error(err.response);
+      });
+    
+
   }
 
   return (
@@ -72,7 +83,7 @@ function SignUp({setSession}) {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Registrate
+            Registrarse
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
