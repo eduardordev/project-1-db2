@@ -23,6 +23,11 @@ export const getInvoices = (page, filter, value) => {
     return doGet(route);
 }
 
+export const getInvoice = (id) => {
+    let route = '/invoice/'.concat(id);
+    return doGet(route);
+}
+
 export const addClient = (data) => {
     let route = "/client/"
     let headers = { "Content-Type": "multipart/form-data" }

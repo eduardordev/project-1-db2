@@ -196,15 +196,13 @@ const MainLayout = () => {
 
           
             <Route path="/users" element={<Users />} />
-            <Route path="/clients/list" element={<Clients />} />
-            <Route path="/clients/create" element={<CreateClients action="add" />} />
-            <Route path="/clients/update/:id" element={<CreateClients action="update" />} />
-            <Route path="/clients/view/:id" element={<CreateClients action="view" />} />
-            <Route path="/personnel/list" element={<Personnel action="view" />} />
-            <Route path="/charts/view" element={<Charts action="view" />} />
-            <Route path="/invoices/update" element={<InvoiceUpdate action="update" />} />
-            <Route path="/invoices/delete" element={<InvoiceDelete action="delete" />} />
-       
+            <Route path="/invoices/list/" element={<Clients />} />
+            <Route path="/invoice/create/" element={<CreateClients action="add" />} />
+            <Route path="/personnel/list/" element={<Personnel action="view" />} />
+            <Route path="/charts/view/" element={<Charts action="view" />} />
+            <Route path="/invoices/update/:id" element={<InvoiceUpdate action="update" />} />
+            <Route path="/invoices/delete/:id" element={<InvoiceDelete action="delete" />} />
+            <Route path="/invoices/view/:id" element={<InvoiceUpdate action="view" />} />
             
 
 

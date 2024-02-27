@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './ClientList.css';
 
@@ -37,6 +38,8 @@ const ClientsList = () => {
   const [clientToDelete, setClientToDelete] = useState();
   const [openDeteleDialog, setOpenDeleteDialog] = React.useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
     loadClients(1);
@@ -62,10 +65,10 @@ const ClientsList = () => {
     setOpenDeleteDialog(true);
   };
   const editRegister = (client) => {
-    window.location.replace('/clients/update/'.concat(client.id));
+    navigate(`/invoices/update/${client.id}`);
   };
   const viewRegister = (client) => {
-    window.location.replace('/clients/view/'.concat(client.id));
+    navigate(`/invoices/view/${client.id}`);
   };
 
   //Calbacks to Delete dialog

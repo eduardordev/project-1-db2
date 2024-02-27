@@ -6,6 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Invoices
 from db_connection import invoice_collection
 
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
 # Create your views here.
 
 @csrf_exempt
@@ -59,24 +62,32 @@ def create_invoice(request):
             return JsonResponse({'error': str(e)}, status=400)
 
         
-@csrf_exempt
-@require_GET
+from bson import ObjectId
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
 def get_invoice(request, pk):
     try:
-        invoice = invoice_collection.find_one({'_id': pk})
-    except Invoices.DoesNotExist:
-        return JsonResponse({'error': 'Invoice not found'}, status=404)
 
-    if request.method == 'GET':
-        invoice_dict = {
-            'id': str(invoice['_id']),
-            'nit': invoice['nit'], 
-            'name': invoice['name'], 
-            'date': invoice['date'],
-            'infile_detail': invoice['infile_detail'],
-            'total': invoice['total']
-        }
-        return JsonResponse(invoice_dict)
+        object_id = ObjectId(pk)
+
+        invoice = invoice_collection.find_one({'_id': object_id})
+        
+        if invoice is None:
+            return JsonResponse({'error': 'Invoice not found'}, status=404)
+
+        if request.method == 'GET':
+            invoice_dict = {
+                'id': str(invoice['_id']),
+                'nit': invoice.get('nit', ''),
+                'name': invoice.get('name', ''), 
+                'date': invoice.get('date', ''),
+                'infile_detail': invoice.get('infile_detail', ''),
+                'total': invoice.get('total', '')
+            }
+            return JsonResponse(invoice_dict)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 @csrf_exempt
 @require_POST
