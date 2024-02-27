@@ -50,7 +50,12 @@ const routes = [
       {
         name: "Facturas Vigentes",
         key: "invoices_list",
-        route: LINKS.invoices,
+        route: LINKS.invoicesVIG,
+      },
+      {
+        name: "Facturas Anuladas",
+        key: "invoices_list",
+        route: LINKS.invoicesANU,
       },
       {
         name: "Crear Factura",

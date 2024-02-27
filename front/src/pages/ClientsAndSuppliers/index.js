@@ -2,10 +2,12 @@
 import ClientsList from "../Clients/List";
 
 
-const Clients = () => {
+const Clients = ( props ) => {
+    console.log(props)
     return(
         <div>
-            <ClientsList />
+
+            <ClientsList sts={props.sts}/>
             
         </div>
     );

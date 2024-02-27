@@ -11,11 +11,15 @@ from rest_framework.permissions import AllowAny
 
 # Create your views here.
 
-@csrf_exempt
-@require_GET
 def get_invoices(request):
     if request.method == 'GET':
-        invoices = invoice_collection.find()
+        status_filter = request.GET.get('status')
+        
+        if status_filter and status_filter in ['VIG', 'ANU']:
+            invoices = invoice_collection.find({'status': status_filter})
+        else:
+            invoices = invoice_collection.find()
+
         invoice_list = [{
             'id': str(invoice['_id']),
             'nit': invoice['nit'], 
@@ -25,8 +29,8 @@ def get_invoices(request):
             'total': invoice['total'],
             'status': invoice['status'],
         } for invoice in invoices]
+        
         return JsonResponse(invoice_list, safe=False)
-
 
 @csrf_exempt
 @require_POST

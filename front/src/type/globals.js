@@ -1,5 +1,6 @@
 export const LINKS = {
-  invoices: "/invoices/list/",
+  invoicesVIG: "/invoices/list/VIG",
+  invoicesANU: "/invoices/list/ANU",
   create_invoice: "/invoice/create/",
   charts : "/charts/view/",
   invoices_update : "/invoices/update/",

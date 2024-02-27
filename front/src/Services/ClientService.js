@@ -16,10 +16,10 @@ export const getDefaultObject = () => {
     )
 }
 
-export const getInvoices = (page, filter, value) => {
+export const getInvoices = (page, filter, value, sts) => {
     let filterStr = filter != null ? "&".concat(filter.concat("=".concat(value))) : "";
-    let route = "/invoices/?".concat("page=".concat(page)).concat(filterStr);
-    
+    let statusFilter = sts != null ? "&status=".concat(sts) : ""; // Agregar el filtro de estado
+    let route = "/invoices/?".concat("page=".concat(page)).concat(filterStr).concat(statusFilter);
     return doGet(route);
 }
 

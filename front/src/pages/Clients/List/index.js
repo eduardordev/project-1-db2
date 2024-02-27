@@ -31,7 +31,7 @@ import DataTable from '../../../components/DataTable';
 import { deleteClient } from '../../../Services/ClientService';
 import { saveAs } from 'file-saver';
 
-const ClientsList = () => {
+const ClientsList = (sts) => {
   const [clients, setClients] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
@@ -40,13 +40,17 @@ const ClientsList = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { id } = useParams();
+  const [initialLoad, setInitialLoad] = useState(true);
 
   useEffect(() => {
+    setClients({})
+    setLoading(true)
     loadClients(1);
-  }, []);
+  }, [sts]);
 
   const loadClients = (page, filter, value) => {
-    getInvoices(page, filter, value)
+    console.log(sts)
+    getInvoices(page, filter, value, sts.sts)
       .then((resp) => {
         setClients(buildData(resp.data, invoiceHeaders()));
         setCurrentPage(parseInt(resp.data.current_page));
@@ -184,7 +188,17 @@ const ClientsList = () => {
   return (
     <div className='client-list-container'>
       <Typography variant='h4' component='div'>
-        Facturas
+        {
+          sts.sts === 'VIG' ?
+            <>
+              Facturas Vigentes
+            </>
+          :
+            <>
+              Facturas Anuladas
+            </>
+        }
+        
       </Typography>
 
       <MDBox my={3}>
