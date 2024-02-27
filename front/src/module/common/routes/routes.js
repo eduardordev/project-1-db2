@@ -70,6 +70,22 @@ const routes = [
         key: "mongo_charts",
         route: LINKS.charts
       },
+      {
+        name: "Update Invoices",
+        key: "invoice_update",
+        route: LINKS.invoices_update
+      },
+      {
+        name: "Delete Invoices",
+        key: "invoice_delete",
+        route: LINKS.invoices_delete
+      },
+      {
+        name: "Crear Empleado",
+        key: "create_employee",
+        route: LINKS.create_employee,
+      },
+
     ],
   },
 ];

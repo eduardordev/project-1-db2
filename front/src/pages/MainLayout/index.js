@@ -65,6 +65,9 @@ import StaffManager from "../Staff/ListStaff/StaffManager";
 import Suppliers from "../ClientsAndSuppliers/index1";
 import CreatePersonnel from "../Personnel/Create/index";
 import Charts from "../Charts/Charts";
+import Invoice from "../Invoices/InvoiceUpdate";
+import InvoiceUpdate from "../Invoices/InvoiceUpdate";
+import InvoiceDelete from "../Invoices/InvoiceDelete";
 
 const MainLayout = () => {
 
@@ -199,6 +202,9 @@ const MainLayout = () => {
             <Route path="/clients/view/:id" element={<CreateClients action="view" />} />
             <Route path="/personnel/list" element={<Personnel action="view" />} />
             <Route path="/charts/view" element={<Charts action="view" />} />
+            <Route path="/invoices/update" element={<InvoiceUpdate action="update" />} />
+            <Route path="/invoices/delete" element={<InvoiceDelete action="delete" />} />
+       
             
 
 
