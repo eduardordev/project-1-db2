@@ -48,7 +48,7 @@ const routes = [
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [
       {
-        name: "Listado de Facturas",
+        name: "Facturas Vigentes",
         key: "invoices_list",
         route: LINKS.invoices,
       },
@@ -57,16 +57,7 @@ const routes = [
         key: "create_invoice",
         route: LINKS.create_invoice,
       },
-      {
-        name: "Update Invoices",
-        key: "invoice_update",
-        route: LINKS.invoices_update
-      },
-      {
-        name: "Delete Invoices",
-        key: "invoice_delete",
-        route: LINKS.invoices_delete
-      },
+    
     ],
   },
   {
