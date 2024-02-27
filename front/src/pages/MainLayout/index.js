@@ -64,6 +64,7 @@ import StaffManager from "../Staff/ListStaff/StaffManager";
 
 import Suppliers from "../ClientsAndSuppliers/index1";
 import CreatePersonnel from "../Personnel/Create/index";
+import Charts from "../Charts/Charts";
 
 const MainLayout = () => {
 
@@ -196,6 +197,9 @@ const MainLayout = () => {
             <Route path="/clients/create" element={<CreateClients action="add" />} />
             <Route path="/clients/update/:id" element={<CreateClients action="update" />} />
             <Route path="/clients/view/:id" element={<CreateClients action="view" />} />
+            <Route path="/personnel/list" element={<Personnel action="view" />} />
+            <Route path="/charts/view" element={<Charts action="view" />} />
+            
 
 
         </Routes>
