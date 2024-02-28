@@ -247,10 +247,12 @@ def get_monthly_sales_of_year(request):
             {"$sort": {"year": -1, "month": 1, "sales": -1}},
         ]
         reports = invoice_collection.aggregate(pipeline)
-        report_list = [
-            {"year": report["year"], "month": report["month"], "sales": report["sales"]}
-            for report in reports
-        ]
+        # Convert Decimal128 to string for JSON serialization
+        report_list = [{
+            'year': report['year'],
+            'month': report['month'],
+            'sales': str(report['sales'])  # Convert Decimal128 to string
+        } for report in reports]
 
         return JsonResponse(report_list, safe=False)
     
