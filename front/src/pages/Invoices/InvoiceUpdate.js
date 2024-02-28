@@ -35,7 +35,11 @@ const InvoiceUpdate= () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/invoices/<str:pk>/update/`, formData);
+      const response = await axios.post(`http://127.0.0.1:8000/invoices/${formData.invoiceId}/update/`, formData,{
+          headers: {
+    'Content-Type': 'application/json',
+  },
+      });
       setSnackbarMessage(response.data.message);
       setOpenSnackbar(true);
     } catch (error) {
