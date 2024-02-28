@@ -210,3 +210,30 @@ def get_monthly_sales_of_year(request):
         } for report in reports]
         
         return JsonResponse(report_list, safe=False)
+    
+def get_units_sold_from_category(request):
+    if request.method == 'GET':
+        category_filter = request.GET.get('category')
+        if not category_filter:
+            return JsonResponse({'error': 'Missing category filter'}, status=400)
+        pipeline = [
+            {'$unwind': {'path': '$infile_detail'}}, 
+            {'$group': {
+                '_id': '$infile_detail.category', 
+                'units_sold': {'$sum': '$infile_detail.quantity'}
+            }}, 
+            {'$sort': {'units_sold': -1}}, 
+            {'$project': {
+                '_id': 0, 
+                'category': '$_id', 
+                'units_sold': 1
+            }}, 
+            {'$match': {'category': category_filter}}
+        ]
+        reports = invoice_collection.aggregate(pipeline)
+        report_list = [{
+            'category': report['category'],
+            'units_sold': report['units_sold']
+        } for report in reports]
+        
+        return JsonResponse(report_list, safe=False)
