@@ -36,4 +36,9 @@ urlpatterns = [
     path('invoices/<str:pk>/update/', update_invoice, name='update_invoice'),
     path('invoices/<str:pk>/delete/', delete_invoice, name='delete_invoice'),
     path('invoices/anular/', anular_factura, name='anular_factura'),
+    # Agregaciones
+    path('invoices/monthly_sales_of_year/', get_monthly_sales_of_year, name='monthly_sales_of_year'),
+    path('invoices/units_sold_from_category/', get_units_sold_from_category, name='units_sold_from_category'),
+    path('invoices/average_price_per_category/', get_average_price_per_category, name='average_price_per_category'),
+    path('invoices/top_customers_by_total_spent/', get_top_customers_by_total_spent, name='top_customers_by_total_spent'),
 ]
