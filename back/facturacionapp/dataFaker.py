@@ -12,7 +12,7 @@ categories = ['Computo', 'Gaming', 'Estudio', 'Electronicos']
 # Lista global de estados posibles
 STATUS_OPTIONS = ['VIG', 'ANU']
 
-def generate_dataset_and_save(num_records=50000, output_json='output.json', output_bson='output.bson'):
+def generate_dataset_and_save(num_records=5000, output_json='output.json', output_bson='output.bson'):
     dataset = []
 
     for _ in range(num_records):
@@ -54,7 +54,7 @@ def generate_infile_details(num_details):
 
 # Ejemplo de uso
 if __name__ == "__main__":
-    num_records = 50000
+    num_records = 5000
     generated_data = generate_dataset_and_save(num_records)
 
     for i, record in enumerate(generated_data, start=1):
