@@ -8,7 +8,7 @@ const Charts = () => {
     <Container maxWidth="lg" style={{display: "flex", flexDirection:"column", alignItems:"center"}}>
       <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px", width: "100%" }}>
         <Typography variant="h4" gutterBottom>
-          Estadisticas de Facturacion
+          Estadisticas de Ventas
         </Typography>
       </Paper>
 

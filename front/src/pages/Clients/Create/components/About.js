@@ -7,14 +7,13 @@ import FormField from "../../../../components/FormField";
 // About.js
 const About = ({ isView, formData }) => {
     const { formField, values, errors, touched } = formData;
-    const { nit, name, date, infile_detail, total, status } = formField;
+    const { nit, name, date, infile_detail, total } = formField;
     const {
       nit: nitV,
       name: nameV,
       date: dateV,
       infile_detail: infile_detailV,
       total: totalV,
-      status: statusV,
     } = values;
   
     return (

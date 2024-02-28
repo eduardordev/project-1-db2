@@ -45,16 +45,16 @@ const ClientsList = (sts) => {
   useEffect(() => {
     setFactura({})
     setLoading(true)
-    loadClients(1);
+    loadClients(currentPage);
   }, [sts]);
 
   const loadClients = (page, filter, value) => {
     console.log(sts)
     getInvoices(page, filter, value, sts.sts)
       .then((resp) => {
-        setFactura(buildData(resp.data, invoiceHeaders()));
+        setFactura(buildData(resp.data.invoices, invoiceHeaders()));
         setCurrentPage(parseInt(resp.data.current_page));
-        setTotalPages(resp.data.pages);
+        setTotalPages(resp.data.total_pages);
         setLoading(false);
       })
       .catch((err) => {
