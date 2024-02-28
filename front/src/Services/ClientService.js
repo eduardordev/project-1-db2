@@ -6,6 +6,7 @@ import { doDelete, doGet, doPatch, doPost } from '../utils/api';
 export const getDefaultObject = () => {
     return (
         {
+            "nit": "",
             "nombre": "",
             "direccion": "",
             "telefono": "",
@@ -16,10 +17,15 @@ export const getDefaultObject = () => {
     )
 }
 
-export const getInvoices = (page, filter, value) => {
+export const getInvoices = (page, filter, value, sts) => {
     let filterStr = filter != null ? "&".concat(filter.concat("=".concat(value))) : "";
-    let route = "/invoices/?".concat("page=".concat(page)).concat(filterStr);
-    
+    let statusFilter = sts != null ? "&status=".concat(sts) : ""; // Agregar el filtro de estado
+    let route = "/invoices/?".concat("page=".concat(page)).concat(filterStr).concat(statusFilter);
+    return doGet(route);
+}
+
+export const getInvoice = (id) => {
+    let route = '/invoice/'.concat(id);
     return doGet(route);
 }
 
@@ -48,10 +54,20 @@ export const getClientList = () => {
 }
 
 export const deleteClient = (id) => {
-    let route = "/client/".concat(id)
+    let route = "/invoices/".concat(id).concat("/delete/")
     
     return doDelete(route)
 }
+
+export const anularFactura = (id) => {
+    let route = "/invoices/anular/"
+    
+    let formData = new FormData();
+    formData.append('id', id);
+    
+    return doPost(route, formData);
+}
+
 
 export const updateClient = (data, id) => {
     let route = "/client/".concat(id).concat("/")

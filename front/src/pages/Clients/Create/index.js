@@ -133,9 +133,9 @@ function CreateClients( {action} ) {
             <MDBox mt={6} mb={8} textAlign="center">
               <MDBox mb={1}>
                 <MDTypography variant="h3" fontWeight="bold">
-                  { isAdd && "Creacion de cliente" }
-                  { isUpdate && "Edicion de cliente" }
-                  { isView && "Visualizacion de cliente" }
+                  { isAdd && "Creacion de Factura" }
+                  { isUpdate && "Edicion de Factura" }
+                  { isView && "Visualizacion de Factura" }
                 </MDTypography>
               </MDBox>
               <MDTypography variant="h5" fontWeight="regular" color="secondary">

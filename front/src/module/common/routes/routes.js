@@ -44,25 +44,26 @@ const routes = [
   {
     type: "collapse",
     name: "Facturas",
-    key: "clients",
+    key: "invoices",
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [
       {
-        name: "Listado de Facturas",
-        key: "clients_list",
-        route: LINKS.clients,
+        name: "Facturas Vigentes",
+        key: "invoices_list",
+        route: LINKS.invoicesVIG,
       },
       {
-        name: "Crear Factura",
-        key: "create_client",
-        route: LINKS.create_client,
+        name: "Facturas Anuladas",
+        key: "invoices_list",
+        route: LINKS.invoicesANU,
       },
+    
     ],
   },
   {
     type: "collapse",
-    name: "CHARTS",
-    key: "personnel",
+    name: "Inteligencia de Negocios",
+    key: "charts",
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [
       {
@@ -70,22 +71,7 @@ const routes = [
         key: "mongo_charts",
         route: LINKS.charts
       },
-      {
-        name: "Update Invoices",
-        key: "invoice_update",
-        route: LINKS.invoices_update
-      },
-      {
-        name: "Delete Invoices",
-        key: "invoice_delete",
-        route: LINKS.invoices_delete
-      },
-      {
-        name: "Crear Empleado",
-        key: "create_employee",
-        route: LINKS.create_employee,
-      },
-
+      
     ],
   },
 ];

@@ -1,38 +1,32 @@
-/**
-=========================================================
-* Material Dashboard 2 PRO React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-pro-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
+// validations.js
 import * as Yup from "yup";
-import checkout from "./form";
+import form from "./form";
 
 const {
   formField: {
+    nit,
     name,
-    address,
-    phone,
-    email,
-    responsable,
-    },
-} = checkout;
+    date,
+    infile_detail,
+    total,
+  },
+} = form;
 
 const validations = [
   Yup.object().shape({
+    [nit.name]: Yup.string().required(nit.errorMsg),
     [name.name]: Yup.string().required(name.errorMsg),
-    [phone.name]: Yup.string().required(phone.errorMsg),
-    [email.name]: Yup.string().required(email.errorMsg).email(email.invalidMsg),
-    [address.name]: Yup.string().required(address.errorMsg),
-    [responsable.name]: Yup.string().required(responsable.errorMsg),
+    [date.name]: Yup.date().required("Campo requerido"),
+    [infile_detail.name]: Yup.array().of(
+      Yup.object().shape({
+        producto: Yup.string().required("Campo requerido"),
+        descripcion: Yup.string().required("Campo requerido"),
+        detail_name: Yup.string().required("Campo requerido"),
+        quantity: Yup.number().required("Campo requerido").positive("Debe ser un número positivo"),
+        price: Yup.number().required("Campo requerido").positive("Debe ser un número positivo"),
+      })
+    ).required("Campo requerido"),
+    [total.name]: Yup.number().required("Campo requerido").positive("Debe ser un número positivo"),
   }),
 ];
 

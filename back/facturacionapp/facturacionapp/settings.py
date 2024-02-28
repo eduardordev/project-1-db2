@@ -25,13 +25,21 @@ SECRET_KEY = 'django-insecure-unlerzic-jm%*!1-$&4-e0bsc_9#&)+3_5741i5eza0w#o0=6h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Reemplaza con la URL de tu frontend
+    "http://localhost:3000",
     # Otros dominios permitidos si es necesario
 ]
 
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 # Application definition
 
@@ -93,6 +101,9 @@ MONGO_DB_NAME = 'facturacionapp'
 
 # Utiliza las variables de entorno para proteger información sensible
 MONGO_URI = f'mongodb+srv://{MONGO_USER}:{MONGO_PASSWORD}@bs2.phmixfa.mongodb.net/{MONGO_DB_NAME}?retryWrites=true&w=majority'
+
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 

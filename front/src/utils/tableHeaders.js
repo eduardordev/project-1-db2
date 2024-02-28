@@ -38,6 +38,7 @@ export const invoiceHeaders = () => {
     { Header: "Cliente", accessor: "name", width: "15%" },
     { Header: "Fecha", accessor: "date", width: "15%" },
     { Header: "Total", accessor: "total", width: "15%" },
+
   ];
 };
 

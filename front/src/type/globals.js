@@ -1,9 +1,10 @@
 export const LINKS = {
-  clients: "/clients/list",
-  create_client: "/clients/create",
-  employees: "/personnel/list",
-  charts : "/charts/view",
-  invoices_update : "/invoices/update",
-  invoices_delete : "/invoices/delete",
-  create_employee: "/personnel/create",
+  invoicesVIG: "/invoices/list/VIG",
+  invoicesANU: "/invoices/list/ANU",
+  create_invoice: "/invoice/create/",
+  charts : "/charts/view/",
+  invoices_update : "/invoices/update/",
+  invoices_view : "/invoices/view/",
+  invoices_delete : "/invoices/delete/",
+
 };

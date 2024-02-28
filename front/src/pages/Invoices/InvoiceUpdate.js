@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getInvoice } from '../../Services/ClientService.js';
 import { Typography, Container, Paper, TextField, Button, Snackbar } from "@mui/material";
 import MuiAlert from '@mui/material/Alert';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const InvoiceUpdate= () => {
+const InvoiceUpdate = (props) => {
+
+  const { id } = useParams();
+  const [invoiceData, setInvoiceData] = useState([]);
+
+  useEffect(() => {
+    getInvoice(id)
+      .then((response) => {
+        console.log(response.data)
+        //setInvoiceData(response.data)
+      }).catch((error) => {
+        console.error(error);
+      });
+  }, [id]);
+
   const [formData, setFormData] = useState({
     invoiceId: '',
     nit: '',
@@ -52,7 +68,16 @@ const InvoiceUpdate= () => {
     <Container maxWidth="lg">
       <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
         <Typography variant="h4" gutterBottom>
-          Update Invoice
+          {
+            props.action === 'update' ? 
+            <>
+              Update Invoice
+            </>
+            :
+            <>
+              View Invoice
+            </>
+          }
         </Typography>
 
         <form onSubmit={handleSubmit}>
@@ -140,7 +165,7 @@ const InvoiceUpdate= () => {
             margin="normal"
           />
 
-<Button type="submit" variant="contained" color="secondary" style={{ marginTop: '20px', backgroundColor: '#4CAF50', color: 'white' }}>
+          <Button type="submit" variant="contained" color="secondary" style={{ marginTop: '20px', backgroundColor: '#4CAF50', color: 'white' }}>
             Update Invoice
           </Button>
         </form>

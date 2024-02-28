@@ -12,6 +12,7 @@ class Invoices(models.Model):
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=12, decimal_places=2)
+    status = models.CharField(max_length=3)
 
     def createInvoice(self):
         invoice_collection.insert_one({
@@ -27,5 +28,6 @@ class Invoices(models.Model):
                     "price": str(self.price),  # Convertir a cadena para compatibilidad BSON
                 }
             ],
-            'total': str(self.total),  # Convertir a cadena para compatibilidad BSON
+            'total': str(self.total),
+            'status': self.status, # Convertir a cadena para compatibilidad BSON
         })

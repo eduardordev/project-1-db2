@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from user_profile.views import get_users, create_user, user_detail, update_user, delete_user, signin
+from user_profile.views import *
 from invoices.views import *
 
 urlpatterns = [
@@ -31,8 +31,14 @@ urlpatterns = [
     path('users/<str:pk>/delete/', delete_user, name='delete_user'),
 
     path('invoices/', get_invoices, name='get_invoices'),
-    path('invoice/<str:pk>', get_invoice, name='get_invoice'),
+    path('invoice/<str:pk>/', get_invoice, name='get_invoice'),
     path('invoices/create/', create_invoice, name='create_invoices'),
     path('invoices/<str:pk>/update/', update_invoice, name='update_invoice'),
     path('invoices/<str:pk>/delete/', delete_invoice, name='delete_invoice'),
+    path('invoices/anular/', anular_factura, name='anular_factura'),
+    # Agregaciones
+    path('invoices/monthly_sales_of_year/', get_monthly_sales_of_year, name='monthly_sales_of_year'),
+    path('invoices/units_sold_from_category/', get_units_sold_from_category, name='units_sold_from_category'),
+    path('invoices/average_price_per_category/', get_average_price_per_category, name='average_price_per_category'),
+    path('invoices/top_customers_by_total_spent/', get_top_customers_by_total_spent, name='top_customers_by_total_spent'),
 ]
