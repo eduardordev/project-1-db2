@@ -28,7 +28,7 @@ import MDTypography from '../../../components/MDTypography';
 import MDButton from '../../../components/MDButton';
 import DataTable from '../../../components/DataTable';
 
-import { deleteClient } from '../../../Services/ClientService';
+import { deleteClient, anularFactura } from '../../../Services/ClientService';
 import { saveAs } from 'file-saver';
 
 const ClientsList = (sts) => {
@@ -45,16 +45,16 @@ const ClientsList = (sts) => {
   useEffect(() => {
     setFactura({})
     setLoading(true)
-    loadClients(1);
+    loadClients(currentPage);
   }, [sts]);
 
   const loadClients = (page, filter, value) => {
     console.log(sts)
     getInvoices(page, filter, value, sts.sts)
       .then((resp) => {
-        setFactura(buildData(resp.data, invoiceHeaders()));
+        setFactura(buildData(resp.data.invoices, invoiceHeaders()));
         setCurrentPage(parseInt(resp.data.current_page));
-        setTotalPages(resp.data.pages);
+        setTotalPages(resp.data.total_pages);
         setLoading(false);
       })
       .catch((err) => {
@@ -97,7 +97,7 @@ const ClientsList = (sts) => {
   };
 
   const successAnulationDialog = () => {
-    deleteClient(invoiceToDelete.id)
+    anularFactura(invoiceToDelete.id)
       .then((resp) => {
         loadClients(currentPage, filter, valueFilter);
       })
@@ -210,12 +210,12 @@ const ClientsList = (sts) => {
             <>
               Facturas Vigentes
             </>
-          :
+            :
             <>
               Facturas Anuladas
             </>
         }
-        
+
       </Typography>
 
       <MDBox my={3}>
@@ -225,11 +225,17 @@ const ClientsList = (sts) => {
           alignItems='flex-start'
           mb={2}
         >
-          <Link to='/factura/create'>
-            <MDButton variant='gradient' color='info'>
-              Agregar Factura
-            </MDButton>
-          </Link>
+          {
+            sts.sts === 'VIG' ?
+              <Link to='/invoice/create/'>
+                <MDButton variant='gradient' color='info'>
+                  Agregar Factura
+                </MDButton>
+              </Link>
+              :
+              <></>
+          }
+          
           <MDBox display='flex'>
             <MDButton
               variant={menu ? 'contained' : 'outlined'}
@@ -240,31 +246,43 @@ const ClientsList = (sts) => {
               <Icon>keyboard_arrow_down</Icon>
             </MDButton>
             {renderMenu}
-            <MDBox ml={1}>
-              <MDButton variant='outlined' color='dark' onClick={exportCSV}>
-                <Icon>description</Icon>
-                &nbsp;export csv
-              </MDButton>
-            </MDBox>
           </MDBox>
         </MDBox>
         <Card>
           {factura.rows !== undefined && factura.rows.length > 0 && (
             <>
-              <DataTable
-                handleSearch={handleSearch}
-                useActions
-                useView
-                useEdit
-                useDelete
-                editAction={editRegister}
-                deleteAction={sts.sts === 'VIG' ? anular :deleteRegister}
-                viewAction={viewRegister}
-                table={factura}
-                showTotalEntries={false}
-                entriesPerPage={false}
-                canSearch
-              />
+              {
+                sts.sts === 'VIG' ?
+                  <DataTable
+                    handleSearch={handleSearch}
+                    useActions
+                    useView
+                    useEdit
+                    useDelete
+                    editAction={editRegister}
+                    deleteAction={anular}
+                    viewAction={viewRegister}
+                    table={factura}
+                    showTotalEntries={false}
+                    entriesPerPage={false}
+                    canSearch
+                  />
+                  :
+                  <DataTable
+                    handleSearch={handleSearch}
+                    useActions
+                    useView
+                    useDelete
+                    editAction={editRegister}
+                    deleteAction={deleteRegister}
+                    viewAction={viewRegister}
+                    table={factura}
+                    showTotalEntries={false}
+                    entriesPerPage={false}
+                    canSearch
+                  />
+              }
+
               <MDBox ml={1}>
                 <Pagination
                   sx={{ marginTop: '20px', marginBottom: '20px' }}
@@ -305,7 +323,7 @@ const ClientsList = (sts) => {
 
       <DeleteDialog
         open={openDeteleDialog}
-        nameToDelete={invoiceToDelete != null ? invoiceToDelete.name : ''}
+        nameToDelete={invoiceToDelete != null ? invoiceToDelete.id : ''}
         successCalback={sts.sts === 'VIG' ? successAnulationDialog : successDeleteDialog}
         cancelCallback={closeDeleteDialog}
       />

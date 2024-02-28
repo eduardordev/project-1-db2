@@ -57,17 +57,12 @@ const routes = [
         key: "invoices_list",
         route: LINKS.invoicesANU,
       },
-      {
-        name: "Crear Factura",
-        key: "create_invoice",
-        route: LINKS.create_invoice,
-      },
     
     ],
   },
   {
     type: "collapse",
-    name: "CHARTS",
+    name: "Inteligencia de Negocios",
     key: "charts",
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [

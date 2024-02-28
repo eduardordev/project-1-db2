@@ -1,45 +1,31 @@
-/**
-=========================================================
-* Material Dashboard 2 PRO React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-pro-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import checkout from "./form";
 
 const {
   formField: {
+    nit,
     name,
-    address,
-    phone,
-    email,
-    responsable,
+    date,  // Agregamos el campo de fecha
+    infile_detail,  // Agregamos el campo de infile_detail
+    total,
   },
 } = checkout;
 
 export const initialValues = {
+  [nit.name]: "",
   [name.name]: "",
-  [address.name]: "",
-  [phone.name]: "",
-  [email.name]: "",
-  [responsable.name]: "",
+  [date.name]: "",  // Aseguramos agregar el campo de fecha con un valor inicial adecuado
+  [infile_detail.name]: [],  // Aseguramos que infile_detail sea un array vacío al inicio
+  [total.name]: 0,  // Aseguramos que total sea 0 al inicio
 };
 
 export const initialValuesFromObj = (obj) => {
   let resp = {
+    [nit.name]: obj.nit,
     [name.name]: obj.name,
-    [address.name]: obj.address,
-    [phone.name]: obj.phone,
-    [email.name]: obj.email,
-    [responsable.name]: obj.responsable,
-  }
-  return resp
+    [date.name]: obj.date,
+    [infile_detail.name]: obj.infile_detail,
+    [total.name]: obj.total,
+  
+  };
+  return resp;
 }

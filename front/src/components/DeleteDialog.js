@@ -23,7 +23,7 @@ const DeleteDialog = ({ open, nameToDelete, successCalback, cancelCallback, mess
         >
             <DialogTitle id="alert-dialog-title">
                 { !(message !== null && message !== undefined) ?
-                    <span>Esta seguro de querer eliminar a "{ nameToDelete }"?</span> :
+                    <span>Esta seguro de querer anular la factura No. "{ nameToDelete }"?</span> :
                     message
 
                 }
@@ -31,7 +31,7 @@ const DeleteDialog = ({ open, nameToDelete, successCalback, cancelCallback, mess
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
                 <Button onClick={handleDelete} autoFocus>
-                    Delete
+                    Anular
                 </Button>
             </DialogActions>
         </Dialog>

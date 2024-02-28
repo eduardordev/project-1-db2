@@ -199,7 +199,6 @@ const MainLayout = () => {
             <Route path="/invoices/list/VIG" element={<Clients sts="VIG" />}  />
             <Route path="/invoices/list/ANU" element={<Clients sts="ANU" />} />
             <Route path="/invoice/create/" element={<CreateClients action="add" />} />
-            <Route path="/personnel/list/" element={<Personnel action="view" />} />
             <Route path="/charts/view/" element={<Charts action="view" />} />
             <Route path="/invoices/update/:id" element={<InvoiceUpdate action="update" />} />
             <Route path="/invoices/delete/:id" element={<InvoiceDelete action="delete" />} />

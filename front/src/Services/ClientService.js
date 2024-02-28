@@ -6,6 +6,7 @@ import { doDelete, doGet, doPatch, doPost } from '../utils/api';
 export const getDefaultObject = () => {
     return (
         {
+            "nit": "",
             "nombre": "",
             "direccion": "",
             "telefono": "",
