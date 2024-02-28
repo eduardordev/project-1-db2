@@ -280,3 +280,36 @@ def get_units_sold_from_category(request):
         } for report in reports]
         
         return JsonResponse(report_list, safe=False)
+
+def get_top_customers_by_total_spent(request, n=5):
+    if request.method == 'GET':
+        pipeline = [
+            {'$group': {
+                '_id': '$name',
+                'total_spent': {'$sum': '$total'}
+            }},
+            {'$sort': {'total_spent': -1}},
+            {'$limit': n}
+        ]
+        result = invoice_collection.aggregate(pipeline)
+        top_customers = list(result)
+        return JsonResponse(top_customers, safe=False)
+
+def get_average_price_per_category(request):
+    if request.method == 'GET':
+        pipeline = [
+            {'$unwind': '$infile_detail'},
+            {'$group': {
+                '_id': '$infile_detail.category',
+                'average_price': {'$avg': '$infile_detail.price'}
+            }},
+            {'$project': {
+                '_id': 0,
+                'category': '$_id',
+                'average_price': 1
+            }}
+        ]
+        result = invoice_collection.aggregate(pipeline)
+        average_prices = list(result)
+        return JsonResponse(average_prices, safe=False)
+
