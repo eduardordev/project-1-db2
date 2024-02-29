@@ -8,6 +8,9 @@ from db_connection import invoice_collection
 import pymongo
 from django.core.paginator import Paginator
 from math import ceil
+from django.core.files.storage import default_storage
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
+
 
 
 from rest_framework.decorators import api_view, permission_classes
@@ -315,3 +318,37 @@ def get_average_price_per_category(request):
         average_prices = list(result)
         return JsonResponse(average_prices, safe=False)
 
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def download_file(request, file_path):
+    try:
+        # Fetch the file from GridFS using the file path
+        file_content = default_storage.open(file_path).read()
+
+        # Create an HTTP response with the file content
+        response = HttpResponse(file_content, content_type='application/octet-stream')
+        response['Content-Disposition'] = f'attachment; filename="{file_path}"'
+        return response
+    except FileNotFoundError:
+        return HttpResponseNotFound("File not found")
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+    
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def upload_file(request):
+    if request.method == "POST":
+        try:
+            file = request.FILES.get('file')
+
+            if not file:
+                return HttpResponseBadRequest("File not provided")
+
+            # Save the file to GridFS
+            file_path = default_storage.save(file.name, file)
+
+            return JsonResponse({"file_path": file_path}, status=201)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
