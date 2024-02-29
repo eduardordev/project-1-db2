@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_profile',
     'invoices',
+    'gridfs_storage'
 ]
 
 
@@ -161,3 +162,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+DEFAULT_GRIDFS_URL = 'mongodb://127.0.0.1:27017'  # Defaults to local MongoDB server
+DEFAULT_GRIDFS_SERVE_URL = None  # If set to None, it will refuse to serve files and raise an Exception
+DEFAULT_GRIDFS_COLLECTION = 'storage'
+DEFAULT_FILE_STORAGE = 'gridfs_storage.storage.GridFSStorage'
