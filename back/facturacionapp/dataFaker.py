@@ -24,6 +24,7 @@ def generate_dataset_and_save(num_records=50000, output_json='output.json', outp
             'infile_detail': generate_infile_details(num_details),
             'total': round(random.uniform(100.0, 10000.0), 2),
             'status': random.choice(STATUS_OPTIONS),  # Estado por defecto "VIG"
+            'fel_pdf_doc': '',  # Dejando el campo fel_pdf_doc vacío
         }
         dataset.append(record)
 

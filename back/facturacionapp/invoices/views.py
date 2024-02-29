@@ -56,6 +56,8 @@ def get_invoices(request):
                 "date": invoice["date"],
                 "infile_detail": invoice["infile_detail"],
                 "total": invoice["total"],
+                "status": str(invoice.get("status", "")),
+                "fel_pdf_doc": str(invoice.get("fel_pdf_doc", "")),
             }
             for invoice in invoices_cursor
         ]
@@ -133,6 +135,7 @@ def get_invoice(request, pk):
                 "infile_detail": invoice.get("infile_detail", ""),
                 "total": invoice.get("total", ""),
                 "status": invoice.get("status", ""),
+                "fel_pdf_doc": invoice.get("fel_pdf_doc", ""),
             }
             return JsonResponse(invoice_dict)
     except Exception as e:

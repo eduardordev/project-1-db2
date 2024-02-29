@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 
-
-import CreateClients from "../Clients/Create/";
 import Menu from "../Menu";
 
-import CreateSupplier from "../suppliers/Create";
 import Clients from "../ClientsAndSuppliers";
-import Personnel from "../Personnel";
 import Users from "../Users";
 
 import AppBar from "@mui/material/AppBar";
@@ -37,37 +33,12 @@ import {
 import Sidenav from "../../module/common/Sidenav";
 import routes from "../../module/common/routes/routes";
 
-import brandWhite from "../../assets/images/logo-ct.png";
-import brandDark from "../../assets/images/logo-ct-dark.png";
-import consertec from "../../assets/images/consertec.png";
 
 import { getSessionData, signOut, getRolLabel } from "../../Services/authService";
-import MainInventory from "../Inventory/MainInventory";
-import CreateInventoryItem from "../Inventory/MainInventory/CreateInventoryItem"
-import QuerantineInventory from "../Inventory/QuerantineInventory";
-import RepairInventory from "../Inventory/RepairInventory";
-import ScrapInventory from "../Inventory/ScrapInventory";
-import MissingExpiration from "../Inventory/MissingExpiration/MissingExpiration";
-import InventoryDetail from "../Inventory/MainInventory/InventoryDetail";
-import GeneralSearch from "../GeneralSearch";
 
-import History from "../History";
 
-import PurchaseOrder from "../PurchaseOrder"
-import CreatePurchaseOrder from "../PurchaseOrder/CreatePurchaseOrder";
-import CreatePurchaseOrderDetail from "../PurchaseOrder/CreatePurchaseOrderDetail";
-import ReceivedList from "../PurchaseOrder/ReceivedList";
-
-import Error from "../Error"
-
-import StaffManager from "../Staff/ListStaff/StaffManager";
-
-import Suppliers from "../ClientsAndSuppliers/index1";
-import CreatePersonnel from "../Personnel/Create/index";
 import Charts from "../Charts/Charts";
-import Invoice from "../Invoices/InvoiceUpdate";
-import InvoiceUpdate from "../Invoices/InvoiceUpdate";
-import InvoiceDelete from "../Invoices/InvoiceDelete";
+import Invoice from "../Invoices/Invoice";
 
 const MainLayout = () => {
 
@@ -198,11 +169,10 @@ const MainLayout = () => {
             <Route path="/users" element={<Users />} />
             <Route path="/invoices/list/VIG" element={<Clients sts="VIG" />}  />
             <Route path="/invoices/list/ANU" element={<Clients sts="ANU" />} />
-            <Route path="/invoice/create/" element={<CreateClients action="add" />} />
+            <Route path="/invoice/create/" element={<Invoice action="add" />} />
             <Route path="/charts/view/" element={<Charts action="view" />} />
-            <Route path="/invoices/update/:id" element={<InvoiceUpdate action="update" />} />
-            <Route path="/invoices/delete/:id" element={<InvoiceDelete action="delete" />} />
-            <Route path="/invoices/view/:id" element={<InvoiceUpdate action="view" />} />
+            <Route path="/invoices/update/:id" element={<Invoice action="update" />} />
+            <Route path="/invoices/view/:id" element={<Invoice action="view" />} />
             
 
 

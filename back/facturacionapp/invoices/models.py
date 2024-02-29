@@ -13,6 +13,7 @@ class Invoices(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=12, decimal_places=2)
     status = models.CharField(max_length=3)
+    fel_pdf_doc = models.FileField(upload_to='fel_pdfs/', blank=True, null=True)
 
     def createInvoice(self):
         invoice_collection.insert_one({
@@ -29,5 +30,6 @@ class Invoices(models.Model):
                 }
             ],
             'total': str(self.total),
-            'status': self.status, # Convertir a cadena para compatibilidad BSON
+            'status': self.status,  # Convertir a cadena para compatibilidad BSON
+            'fel_pdf_doc': str(self.fel_pdf_doc),  # Convertir a cadena para compatibilidad BSON
         })
