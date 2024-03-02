@@ -4,7 +4,7 @@ import DataTable from '../../components/DataTable';
 
 function Aggregation01() {
     const [data, setData] = useState([]);
-    const [selectedYear, setSelectedYear] = useState('2022'); // Default selected year
+    const [selectedYear, setSelectedYear] = useState('2023'); // Default selected year
 
     useEffect(() => {
         fetchData(selectedYear);
@@ -13,8 +13,11 @@ function Aggregation01() {
     const fetchData = async (year) => {
         try {
             const response = await axios.get(`http://localhost:8000/invoices/monthly_sales_of_year/?year=${year}`);
-            setData(response.data);
-            console.log(data);
+            const formattedData = response.data.map(item => ({
+                ...item,
+                sales: parseFloat(item.sales)
+            }));
+            setData(formattedData);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -28,7 +31,7 @@ function Aggregation01() {
         <div>
             <div>
                 <label htmlFor="year">Select Year:</label>
-                <select id="year" value={selectedYear} onChange={handleYearChange}>
+                <select id="year" value={selectedYear} onChange={handleYearChange} style={{ fontSize: '16px', marginLeft: '10px', padding: '2px' }}>
                     <option value="2023">2023</option>
                     <option value="2024">2024</option>
                     {/* Add more years as needed */}
