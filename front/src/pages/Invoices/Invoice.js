@@ -4,6 +4,15 @@ import { Typography, Container, Paper, TextField, Button, Snackbar } from "@mui/
 import MuiAlert from '@mui/material/Alert';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Select from 'react-select'
+
+
+const toBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = reject;
+});
 
 const InvoiceUpdate = (props) => {
 
@@ -36,7 +45,24 @@ const InvoiceUpdate = (props) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
+
+
   const handleFormChange = (event) => {
+
+    //TODO: get File from  somewhere 
+    /*
+    if (hay archivo) {
+    try {
+          const file = await toBase64(file);
+          formData.fel_pdf_doc = file
+      } catch(error) {
+          console.error(error);
+      }
+    }
+    */
+
+
+
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,

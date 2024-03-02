@@ -1,5 +1,9 @@
 from django.db import models
-from db_connection import invoice_collection
+from db_connection import invoice_collection, fs
+from django.core.files.base import ContentFile
+import base64
+import hashlib
+
 
 class Invoices(models.Model):
     nit = models.PositiveIntegerField()
@@ -13,10 +17,22 @@ class Invoices(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=12, decimal_places=2)
     status = models.CharField(max_length=3)
-    fel_pdf_doc = models.FileField(upload_to='fel_pdfs/', blank=True, null=True)
+    # fel_pdf_doc = models.FileField(upload_to='fel_pdfs/', blank=True, null=True)
+    fel_pdf_doc = models.TextField()
+
+    def calculate_hash(self, content):
+        md5 = hashlib.md5()
+        md5.update(content)
+        return md5.hexdigest()
+
+    def get_file(self, encoded_file):
+        format, file_str = encoded_file.split(';base64,')
+        ext = format.split('/')[-1]
+        data = ContentFile(base64.b64decode(file_str), name='temp.' + ext)
+        return data
 
     def createInvoice(self):
-        invoice_collection.insert_one({
+        metadata = {
             'nit': self.nit,
             'name': self.name,
             'date': self.date,
@@ -26,10 +42,28 @@ class Invoices(models.Model):
                     "descripcion": self.descripcion,
                     "detail_name": self.detail_name,
                     "quantity": self.quantity,
-                    "price": str(self.price),  # Convertir a cadena para compatibilidad BSON
+                    # Convertir a cadena para compatibilidad BSON
+                    "price": str(self.price),
                 }
             ],
             'total': str(self.total),
             'status': self.status,  # Convertir a cadena para compatibilidad BSON
-            'fel_pdf_doc': str(self.fel_pdf_doc),  # Convertir a cadena para compatibilidad BSON
-        })
+        }
+
+        if self.fel_pdf_doc:
+            file = self.get_file(self.fel_pdf_doc)
+            file_content = file.read()
+            file_hash = self.calculate_hash(file_content)
+
+            # Insert the file into GridFS
+            file_id = fs.put(file_content, filename=file_hash)
+
+            metadata['fel_pdf_doc'] = [{
+                'filename': file_hash,
+                'hash': file_hash,
+                'file_id': file_id
+            }]
+
+        invoice_collection.insert_one(metadata)
+
+        return file_id
