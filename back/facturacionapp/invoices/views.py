@@ -371,3 +371,30 @@ def get_file(request, file_id):
         return response
     except NoFile:
         raise ValueError("File not found!")
+
+
+@csrf_exempt
+def bulk_anular_facturas(request):
+    if request.method == "POST":
+        try:
+            # Load IDs from the request body
+            data = json.loads(request.body)
+            invoice_ids = data.get("invoice_ids", [])
+
+            # Convert string IDs to ObjectId
+            object_ids = [ObjectId(invoice_id) for invoice_id in invoice_ids]
+
+            # Bulk update operation to set status to "ANU"
+            result = invoice_collection.update_many(
+                {"_id": {"$in": object_ids}},
+                {"$set": {"status": "ANU"}}
+            )
+
+            # Respond with how many invoices were updated
+            return JsonResponse({"message": f"{result.modified_count} invoices voided successfully"})
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=405)
