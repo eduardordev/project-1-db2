@@ -7,6 +7,13 @@ import axios from 'axios';
 import Select from 'react-select'
 import { blue } from "@mui/material/colors";
 
+const toBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = reject;
+});
+
 const InvoiceUpdate = (props) => {
 
   const { id } = useParams();
@@ -69,7 +76,24 @@ const InvoiceUpdate = (props) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
+
+
   const handleFormChange = (event) => {
+
+    //TODO: get File from  somewhere 
+    /*
+    if (hay archivo) {
+    try {
+          const file = await toBase64(file);
+          formData.fel_pdf_doc = file
+      } catch(error) {
+          console.error(error);
+      }
+    }
+    */
+
+
+
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,

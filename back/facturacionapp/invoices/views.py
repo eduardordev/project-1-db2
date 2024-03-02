@@ -1,17 +1,18 @@
+from bson import ObjectId
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.core.exceptions import ValidationError
 import json
 from django.views.decorators.csrf import csrf_exempt
 from .models import Invoices
-from db_connection import invoice_collection
+from db_connection import invoice_collection, fs
 import pymongo
 from django.core.paginator import Paginator
 from math import ceil
 from django.core.files.storage import default_storage
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
 
-
+from gridfs import GridFS, NoFile
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -38,7 +39,8 @@ def get_invoices(request):
         # Realizar la consulta optimizada utilizando el índice
         invoices_cursor = (
             invoice_collection.find(
-                query, {"nit": 1, "name": 1, "date": 1, "infile_detail": 1, "total": 1}
+                query, {"nit": 1, "name": 1, "date": 1,
+                        "infile_detail": 1, "total": 1}
             )
             .skip((page_number - 1) * page_size)
             .limit(page_size)
@@ -88,14 +90,13 @@ def create_invoice(request):
             infile_detail = data.get("infile_detail", [])
             total = data.get("total")
             status = data.get("status")
+            fel_pdf_doc = data.get("fel_pdf_doc")
 
             # Validar los datos según tus requisitos
             if not nit:
                 return JsonResponse(
                     {"error": 'El campo "nit" es requerido.'}, status=400
                 )
-
-            # Puedes realizar más validaciones según tus necesidades...
 
             new_invoice = Invoices(
                 nit=nit,
@@ -104,17 +105,16 @@ def create_invoice(request):
                 infile_detail=infile_detail,
                 total=total,
                 status=status,
+                fel_pdf_doc=fel_pdf_doc
             )
+
             new_invoice.createInvoice()
-            print(data)
+
             return JsonResponse({"message": "Factura creada exitosamente"}, status=201)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
-
-
-from bson import ObjectId
 
 
 @api_view(["GET"])
@@ -214,7 +214,8 @@ def anular_factura(request):
             return JsonResponse({"error": "Invoice not found"}, status=404)
 
         # Actualizar el estado de la factura a "ANU"
-        invoice_collection.update_one({"_id": object_id}, {"$set": {"status": "ANU"}})
+        invoice_collection.update_one(
+            {"_id": object_id}, {"$set": {"status": "ANU"}})
 
         return JsonResponse({"message": "Factura Anulada Exitosamente!"})
     except Exception as e:
@@ -261,24 +262,25 @@ def get_monthly_sales_of_year(request):
         } for report in reports]
 
         return JsonResponse(report_list, safe=False)
-    
+
+
 def get_units_sold_from_category(request):
     if request.method == 'GET':
         category_filter = request.GET.get('category')
         if not category_filter:
             return JsonResponse({'error': 'Missing category filter'}, status=400)
         pipeline = [
-            {'$unwind': {'path': '$infile_detail'}}, 
+            {'$unwind': {'path': '$infile_detail'}},
             {'$group': {
-                '_id': '$infile_detail.category', 
+                '_id': '$infile_detail.category',
                 'units_sold': {'$sum': '$infile_detail.quantity'}
-            }}, 
-            {'$sort': {'units_sold': -1}}, 
+            }},
+            {'$sort': {'units_sold': -1}},
             {'$project': {
-                '_id': 0, 
-                'category': '$_id', 
+                '_id': 0,
+                'category': '$_id',
                 'units_sold': 1
-            }}, 
+            }},
             {'$match': {'category': category_filter}}
         ]
         reports = invoice_collection.aggregate(pipeline)
@@ -286,8 +288,9 @@ def get_units_sold_from_category(request):
             'category': report['category'],
             'units_sold': report['units_sold']
         } for report in reports]
-        
+
         return JsonResponse(report_list, safe=False)
+
 
 def get_top_customers_by_total_spent(request, n=5):
     if request.method == 'GET':
@@ -302,6 +305,7 @@ def get_top_customers_by_total_spent(request, n=5):
         result = invoice_collection.aggregate(pipeline)
         top_customers = list(result)
         return JsonResponse(top_customers, safe=False)
+
 
 def get_average_price_per_category(request):
     if request.method == 'GET':
@@ -330,14 +334,15 @@ def download_file(request, file_path):
         file_content = default_storage.open(file_path).read()
 
         # Create an HTTP response with the file content
-        response = HttpResponse(file_content, content_type='application/octet-stream')
+        response = HttpResponse(
+            file_content, content_type='application/octet-stream')
         response['Content-Disposition'] = f'attachment; filename="{file_path}"'
         return response
     except FileNotFoundError:
         return HttpResponseNotFound("File not found")
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-    
+
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -355,3 +360,41 @@ def upload_file(request):
             return JsonResponse({"file_path": file_path}, status=201)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
+
+
+def get_file(request, file_id):
+    try:
+        f = fs.get(ObjectId(file_id))
+        file_data = f.read()
+        response = HttpResponse(file_data, content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename="test.txt"'
+        return response
+    except NoFile:
+        raise ValueError("File not found!")
+
+
+@csrf_exempt
+def bulk_anular_facturas(request):
+    if request.method == "POST":
+        try:
+            # Load IDs from the request body
+            data = json.loads(request.body)
+            invoice_ids = data.get("invoice_ids", [])
+
+            # Convert string IDs to ObjectId
+            object_ids = [ObjectId(invoice_id) for invoice_id in invoice_ids]
+
+            # Bulk update operation to set status to "ANU"
+            result = invoice_collection.update_many(
+                {"_id": {"$in": object_ids}},
+                {"$set": {"status": "ANU"}}
+            )
+
+            # Respond with how many invoices were updated
+            return JsonResponse({"message": f"{result.modified_count} invoices voided successfully"})
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=405)
