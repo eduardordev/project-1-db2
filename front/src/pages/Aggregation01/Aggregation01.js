@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DataTable from '../../components/DataTable';
 
-function SalesTable() {
+function Aggregation01() {
     const [data, setData] = useState([]);
     const [selectedYear, setSelectedYear] = useState('2022'); // Default selected year
 
@@ -48,4 +48,4 @@ function SalesTable() {
     );
 }
 
-export default SalesTable;
+export default Aggregation01;
