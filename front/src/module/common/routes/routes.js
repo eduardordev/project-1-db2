@@ -74,6 +74,20 @@ const routes = [
       
     ],
   },
+  {
+    type: "collapse",
+    name: "Agregaciones",
+    key: "aggregation01",
+    icon: <Icon fontSize="medium">description</Icon>,
+    collapse: [
+      {
+        name: "Agregacion 1",
+        key: "aggregation01_test",
+        route: LINKS.aggregation01,
+      },
+    
+    ],
+  },
 ];
 
 export default routes;

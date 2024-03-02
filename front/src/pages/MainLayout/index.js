@@ -39,6 +39,7 @@ import { getSessionData, signOut, getRolLabel } from "../../Services/authService
 
 import Charts from "../Charts/Charts";
 import Invoice from "../Invoices/Invoice";
+import SalesTable from "../Aggregation01/Aggregation01";
 
 const MainLayout = () => {
 
@@ -173,6 +174,7 @@ const MainLayout = () => {
             <Route path="/charts/view/" element={<Charts action="view" />} />
             <Route path="/invoices/update/:id" element={<Invoice action="update" />} />
             <Route path="/invoices/view/:id" element={<Invoice action="view" />} />
+            <Route path="/aggregation01/view/" element={<SalesTable action="view" />} />
             
 
 
