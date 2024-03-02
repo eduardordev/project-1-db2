@@ -5,7 +5,7 @@ import MuiAlert from '@mui/material/Alert';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Select from 'react-select'
-
+import { blue } from "@mui/material/colors";
 
 const toBase64 = file => new Promise((resolve, reject) => {
   const reader = new FileReader();
@@ -18,6 +18,21 @@ const InvoiceUpdate = (props) => {
 
   const { id } = useParams();
   const [invoiceData, setInvoiceData] = useState([]);
+  const [invoiceDets, setInvoiceDets] = useState([]);
+  const [nuevoProducto, setNuevoProducto] = useState('');
+  const [nuevaDescripcion, setNuevaDescripcion] = useState('');
+  const [nuevoDetalle, setNuevoDetalle] = useState('');
+  const [nuevaCantidad, setNuevaCantidad] = useState(0);
+  const [nuevoPrecio, setNuevoPrecio] = useState(0.0);
+
+
+  const products = ['Ventilador', 'Tarjeta Grafica', 'Mouse', 'Monitor', 'Case', 'Pasta Termica', 'Laptop', 'Procesador', 'Audifonos', 'Power Bank']
+
+  const productList = products.map(prod => ({
+    value: prod,
+    label: prod,
+  }));
+
 
   useEffect(() => {
     getInvoice(id)
@@ -29,18 +44,34 @@ const InvoiceUpdate = (props) => {
       });
   }, [id]);
 
+  const agregarDetalle = () => {
+    const nuevoDetalle = {
+      "producto": nuevoProducto,
+      "descripcion": nuevaDescripcion,
+      "detail_name": nuevoDetalle,
+      "quantity": nuevaCantidad,
+      "price": nuevoPrecio
+    };
+
+    setInvoiceDets(prevInvoiceDets => [...prevInvoiceDets, nuevoDetalle]);
+
+  };
+
   const [formData, setFormData] = useState({
     invoiceId: '',
     nit: '',
     name: '',
     date: '',
-    producto: '',
-    descripcion: '',
-    detail_name: '',
-    quantity: '',
-    price: '',
+    infile_detail: invoiceDets,
     total: '',
   });
+
+  const customStyles = {
+    control: base => ({
+      ...base,
+      width: 400,
+    }),
+  };
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -77,10 +108,10 @@ const InvoiceUpdate = (props) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/invoices/${formData.invoiceId}/update/`, formData,{
-          headers: {
-    'Content-Type': 'application/json',
-  },
+      const response = await axios.post(`http://127.0.0.1:8000/invoices/${formData.invoiceId}/update/`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       setSnackbarMessage(response.data.message);
       setOpenSnackbar(true);
@@ -95,93 +126,87 @@ const InvoiceUpdate = (props) => {
       <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
         <Typography variant="h4" gutterBottom>
           {
-            props.action === 'update' ? 
-            <>
-              Update Invoice
-            </>
-            :
-            <>
-              View Invoice
-            </>
+            props.action === 'update' ?
+              <>
+                Update Invoice
+              </>
+              :
+              <>
+                View Invoice
+              </>
           }
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          {/* Invoice ID input */}
-          <TextField
-            label="Invoice ID"
-            name="invoiceId"
-            value={formData.invoiceId}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
+          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <div>
+              <TextField
+                label="Invoice ID"
+                name="invoiceId"
+                value={formData.invoiceId}
+                onChange={handleFormChange}
+                fullWidth
+                margin="normal"
+              />
 
-          {/* Other input fields */}
-          <TextField
-            label="Nit"
-            name="nit"
-            value={formData.nit}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Name"
-            name="name"
-            value={formData.name}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Date"
-            name="date"
-            value={formData.date}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Producto"
-            name="producto"
-            value={formData.producto}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Descripcion"
-            name="descripcion"
-            value={formData.descripcion}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Detail Name"
-            name="detail_name"
-            value={formData.detail_name}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Quantity"
-            name="quantity"
-            value={formData.quantity}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Price"
-            name="price"
-            value={formData.price}
-            onChange={handleFormChange}
-            fullWidth
-            margin="normal"
-          />
+              {/* Other input fields */}
+              <TextField
+                label="Nit"
+                name="nit"
+                value={formData.nit}
+                onChange={handleFormChange}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Name"
+                name="name"
+                value={formData.name}
+                onChange={handleFormChange}
+                fullWidth
+                margin="normal"
+              />
+            </div>
+            <div>
+              <TextField
+                label="Date"
+                name="date"
+                value={formData.date}
+                onChange={handleFormChange}
+                fullWidth
+                margin="normal"
+              />
+            </div>
+          </div>
+
+          <br />
+          <hr />
+          <br />
+
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+
+            <Select
+              options={productList}
+              styles={customStyles}
+              onChange={(e)=>{
+                
+              }}
+            />
+
+            <Button
+              variant="contained"
+              color="info"
+              style={{ marginLeft: '1.5vh', backgroundColor: '#1e88e5', color: 'white' }}
+              >
+              Agregar Producto
+            </Button>
+          </div>
+
+
+          <br />
+          <hr />
+
+
           <TextField
             label="Total"
             name="total"

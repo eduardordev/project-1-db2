@@ -5,3 +5,4 @@ djangorestframework
 dnspython
 django-cors-headers
 django-storages
+django-gridfs-storage
