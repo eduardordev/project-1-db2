@@ -69,6 +69,16 @@ export const anularFactura = (id) => {
 }
 
 
+export const anularFacturaBulk = (id) => {
+    let route = "/bulk_anular_facturas/"
+    
+    let data = {
+        invoice_ids: [id]
+      };
+    
+    return doPost(route, data);
+}
+
 export const updateClient = (data, id) => {
     let route = "/client/".concat(id).concat("/")
     

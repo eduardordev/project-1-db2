@@ -364,24 +364,24 @@ def get_file(request, file_id):
 def bulk_anular_facturas(request):
     if request.method == "POST":
         try:
-            # Load IDs from the request body
             data = json.loads(request.body)
             invoice_ids = data.get("invoice_ids", [])
 
-            # Convert string IDs to ObjectId
+            # Convertir string IDs a ObjectId
             object_ids = [ObjectId(invoice_id) for invoice_id in invoice_ids]
 
-            # Bulk update operation to set status to "ANU"
+            # Operación de actualización masiva para establecer el estado en "ANU"
             result = invoice_collection.update_many(
                 {"_id": {"$in": object_ids}},
                 {"$set": {"status": "ANU"}}
             )
 
-            # Respond with how many invoices were updated
-            return JsonResponse({"message": f"{result.modified_count} invoices voided successfully"})
+            # Responder con cuántas facturas se actualizaron
+            return JsonResponse({"message": f"{result.modified_count} facturas anuladas exitosamente"})
         except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+            return JsonResponse({"error": "Formato JSON no válido"}, status=400)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
     else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
+        return JsonResponse({"error": "Método de solicitud no válido"}, status=405)
+
