@@ -40,6 +40,7 @@ import { getSessionData, signOut, getRolLabel } from "../../Services/authService
 import Charts from "../Charts/Charts";
 import Invoice from "../Invoices/Invoice";
 import Aggregation01 from "../Aggregation01/Aggregation01";
+import Aggregation02 from "../Aggregation02/Aggregation02";
 
 const MainLayout = () => {
 
@@ -175,7 +176,7 @@ const MainLayout = () => {
             <Route path="/invoices/update/:id" element={<Invoice action="update" />} />
             <Route path="/invoices/view/:id" element={<Invoice action="view" />} />
             <Route path="/aggregation01/view/" element={<Aggregation01 action="view" />} />
-            
+            <Route path="/aggregation02/view/" element={<Aggregation02 action="view" />} />
 
 
         </Routes>

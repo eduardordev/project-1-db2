@@ -77,15 +77,20 @@ const routes = [
   {
     type: "collapse",
     name: "Agregaciones",
-    key: "aggregation01",
+    key: "aggregations",
     icon: <Icon fontSize="medium">description</Icon>,
     collapse: [
       {
         name: "Agregacion 1",
-        key: "aggregation01_test",
+        key: "aggregation01",
         route: LINKS.aggregation01,
       },
-    
+      {
+        name: "Agregacion 2",
+        key: "aggregation02",
+        route: LINKS.aggregation01,
+      },
+
     ],
   },
 ];

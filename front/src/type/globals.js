@@ -6,5 +6,6 @@ export const LINKS = {
   invoices_update : "/invoices/update/",
   invoices_view : "/invoices/view/",
   invoices_delete : "/invoices/delete/",
-  aggregation01: "/aggregation01/view/"
+  aggregation01: "/aggregation01/view/",
+  aggregation01: "/aggregation02/view/",
 };
