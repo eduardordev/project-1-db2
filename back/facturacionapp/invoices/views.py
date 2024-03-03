@@ -148,52 +148,36 @@ def get_invoice(request, pk):
 @csrf_exempt
 @require_POST
 def update_invoice(request, pk):
-    try:
-        invoice = invoice_collection.find_one({"_id": pk})
-    except Invoices.DoesNotExist:
-        return JsonResponse({"error": "Invoice not found"}, status=404)
-
     if request.method == "POST":
-        nit = request.POST.get("nit")
-        name = request.POST.get("name")
-        date = request.POST.get("date")
-        producto = request.POST.get("producto")
-        descripcion = request.POST.get("descripcion")
-        detail_name = request.POST.get("detail_name")
-        quantity = request.POST.get("quantity")
-        price = request.POST.get("price")
-        infile_detail = [
-            {
-                "producto": producto,
-                "descrpcion": descripcion,
-                "detail_name": detail_name,
-                "quantity": quantity,
-                "price": price,
-            }
-        ]
-        total = (request.POST.get("total"),)
-        status = (request.POST.get("status"),)
+        try:
+            
+            nit = request.POST.get("nit")
+            name = request.POST.get("name")
+            date = request.POST.get("date")
+            infile_detail = request.POST.get("infile_detail", [])
+            total = request.POST.get("total")
+            status = request.POST.get("status")
+            fel_pdf_doc = request.POST.get("fel_pdf_doc", "")
 
-        # Validar los datos según tus requisitos
-        if not nit:
-            return JsonResponse({"error": "Invalid data"}, status=400)
+            # Validar los datos según tus requisitos
+            if not nit:
+                return JsonResponse({"error": 'El campo "nit" es requerido.'}, status=400)
 
-        invoice_collection.update_one(
-            {"_id": pk},
-            {
-                "$set": {
-                    "nit": nit,
-                    "name": name,
-                    "date": date,
-                    "infile_detail": infile_detail,
-                    "total": total,
-                    "status": status,
-                }
-            },
-        )
-        return JsonResponse({"message": "Factura actualizada exitosamente"})
+            # Actualizar la factura en la base de datos
+            Invoices.objects.filter(id=pk).update(
+                nit=nit,
+                name=name,
+                date=date,
+                infile_detail=infile_detail,
+                total=total,
+                status=status,
+                fel_pdf_doc=fel_pdf_doc,
+            )
 
-
+            return JsonResponse({"message": "Factura actualizada exitosamente"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+        
 @csrf_exempt
 @require_POST
 def delete_invoice(request, pk):

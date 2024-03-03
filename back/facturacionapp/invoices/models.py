@@ -3,6 +3,8 @@ from db_connection import invoice_collection, fs
 from django.core.files.base import ContentFile
 import base64
 import hashlib
+from decimal import Decimal
+
 
 
 class Invoices(models.Model):
@@ -12,7 +14,7 @@ class Invoices(models.Model):
     infile_detail = models.JSONField()
     producto = models.CharField(max_length=100)
     descripcion = models.TextField()
-    detail_name = models.TextField()
+    category = models.TextField()
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=12, decimal_places=2)
@@ -38,16 +40,15 @@ class Invoices(models.Model):
             'date': self.date,
             'infile_detail': [
                 {
-                    "producto": self.producto,
-                    "descripcion": self.descripcion,
-                    "detail_name": self.detail_name,
-                    "quantity": self.quantity,
-                    # Convertir a cadena para compatibilidad BSON
-                    "price": str(self.price),
-                }
+                    "producto": detail.get("producto"),
+                    "descripcion": detail.get("descripcion"),
+                    "category": detail.get("category"),
+                    "quantity": detail.get("quantity"),
+                    "price": str(detail.get("price")),
+                } for detail in self.infile_detail
             ],
             'total': str(self.total),
-            'status': self.status,  # Convertir a cadena para compatibilidad BSON
+            'status': self.status,
         }
 
         if self.fel_pdf_doc:
@@ -61,7 +62,7 @@ class Invoices(models.Model):
             metadata['fel_pdf_doc'] = [{
                 'filename': file_hash,
                 'hash': file_hash,
-                'file_id': file_id
+                'file_id': str(file_id)
             }]
 
         invoice_collection.insert_one(metadata)
