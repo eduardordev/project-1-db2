@@ -280,8 +280,8 @@ def get_units_sold_from_category(request):
                 '_id': 0,
                 'category': '$_id',
                 'units_sold': 1
-            }},
-            {'$match': {'category': category_filter}}
+            }}, 
+            {'$match': {'category': {'$ne': None}, 'category': category_filter}}
         ]
         reports = invoice_collection.aggregate(pipeline)
         report_list = [{
@@ -319,6 +319,9 @@ def get_average_price_per_category(request):
                 '_id': 0,
                 'category': '$_id',
                 'average_price': 1
+            }},
+            {'$match': {
+                'category': {'$ne': None}   
             }}
         ]
         result = invoice_collection.aggregate(pipeline)
