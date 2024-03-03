@@ -150,36 +150,45 @@ def get_invoice(request, pk):
 @csrf_exempt
 @require_POST
 def update_invoice(request, pk):
-    if request.method == "POST":
-        try:
-            pk = ObjectId(pk)
-            nit = request.POST.get("nit")
-            name = request.POST.get("name")
-            date = request.POST.get("date")
-            infile_detail = request.POST.get("infile_detail", [])
-            total = request.POST.get("total")
-            status = request.POST.get("status")
-            fel_pdf_doc = request.POST.get("fel_pdf_doc", "")
+    try:
+        # Parse the JSON body of the request.
+        data = json.loads(request.body)
 
-            # Validar los datos según tus requisitos
-            if not nit:
-                return JsonResponse({"error": 'El campo "nit" es requerido.'}, status=400)
+        # Extracting information from the data.
+        nit = data.get("nit")
+        name = data.get("name")
+        date = data.get("date")
+        infile_detail = data.get("infile_detail", [])
+        total = data.get("total")
+        status = data.get("status")
+        # Assuming this is a reference, not the file content itself.
+        fel_pdf_doc = data.get("fel_pdf_doc", "")
 
-            # Actualizar la factura en la base de datos
-            Invoices.objects.filter(id=pk).update(
-                nit=nit,
-                name=name,
-                date=date,
-                infile_detail=infile_detail,
-                total=total,
-                status=status,
-                fel_pdf_doc=fel_pdf_doc,
-            )
+        # Validating the required data.
+        if not nit:
+            return JsonResponse({"error": 'El campo "nit" es requerido.'}, status=400)
 
-            return JsonResponse({"message": "Factura actualizada exitosamente"})
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=400)
-        
+        # Preparing the update document.
+        update_data = {
+            '$set': {
+                'nit': nit,
+                'name': name,
+                'date': date,
+                'infile_detail': infile_detail,
+                'total': total,
+                'status': status,
+                'fel_pdf_doc': fel_pdf_doc,
+            }
+        }
+
+        # Updating the invoice in the database.
+        invoice_collection.update_one({'_id': pk}, update_data)
+
+        return JsonResponse({"message": "Factura actualizada exitosamente"})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
+
 @csrf_exempt
 @require_POST
 def delete_invoice(request, pk):
@@ -266,7 +275,7 @@ def get_units_sold_from_category(request):
                 '_id': 0,
                 'category': '$_id',
                 'units_sold': 1
-            }}, 
+            }},
             {'$match': {'category': {'$ne': None}, 'category': category_filter}}
         ]
         reports = invoice_collection.aggregate(pipeline)
@@ -307,7 +316,7 @@ def get_average_price_per_category(request):
                 'average_price': 1
             }},
             {'$match': {
-                'category': {'$ne': None}   
+                'category': {'$ne': None}
             }}
         ]
         result = invoice_collection.aggregate(pipeline)
@@ -386,4 +395,3 @@ def bulk_anular_facturas(request):
             return JsonResponse({"error": str(e)}, status=400)
     else:
         return JsonResponse({"error": "Método de solicitud no válido"}, status=405)
-
