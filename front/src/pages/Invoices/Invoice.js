@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getInvoice } from '../../Services/ClientService.js';
 import { Typography, Container, Paper, TextField, Button, Snackbar } from "@mui/material";
-import { Table, TableBody, TableCell, TableRow, TableContainer, TableHead } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow, TableContainer } from "@mui/material";
 import MuiAlert from '@mui/material/Alert';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -15,6 +15,7 @@ const toBase64 = file => new Promise((resolve, reject) => {
   reader.onload = () => resolve(reader.result);
   reader.onerror = reject;
 });
+
 const getDate = () => {
   const today = new Date();
   const year = today.getFullYear();
@@ -29,47 +30,77 @@ const InvoiceUpdate = (props) => {
   const { id } = useParams();
   const [invoiceData, setInvoiceData] = useState([]);
   const [invoiceDets, setInvoiceDets] = useState([]);
-  const [nuevoProducto, setNuevoProducto] = useState('');
-  const [nuevaDescripcion, setNuevaDescripcion] = useState('');
-  const [nuevoDetalle, setNuevoDetalle] = useState('');
-  const [nuevaCantidad, setNuevaCantidad] = useState(0);
-  const [nuevoPrecio, setNuevoPrecio] = useState(0.0);
-  const [date, setDate] = useState();
+  const [nit, setNit] = useState();
+  const [name, setName] = useState();
+  const [productSelected, setProductSelected] = useState({});
+  const [total, setTotal] = useState(0.00)
+  const [file, setFile] = useState([]);
+
+  const [formData, setFormData] = useState({
+    nit: nit,
+    name: name,
+    date: getDate(),
+    infile_detail: invoiceDets,
+    total: total,
+    status: "VIG",
+    fel_pdf_doc: "",
+  });
 
 
 
   useEffect(() => {
-    console.log(productList)
-    getInvoice(id)
-      .then((response) => {
-        console.log(response.data)
-        setInvoiceData(response.data)
-      }).catch((error) => {
-        console.error(error);
-      });
-  }, [id]);
+    setFormData({
+      ...formData,
+      infile_detail: invoiceDets,
+      total: total,
+    });
+    if (props.action === 'update' || props.action === "view") {
+      getInvoice(id)
+        .then((response) => {
+          console.log(response.data)
+          setInvoiceData(response.data)
+        }).catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [id, invoiceDets]);
 
-  const agregarDetalle = () => {
-    const nuevoDetalle = {
-      "producto": nuevoProducto,
-      "descripcion": nuevaDescripcion,
-      "detail_name": nuevoDetalle,
-      "quantity": nuevaCantidad,
-      "price": nuevoPrecio
-    };
 
-    setInvoiceDets(prevInvoiceDets => [...prevInvoiceDets, nuevoDetalle]);
-
+  const handleAgregarProducto = () => {
+    if (productSelected) {
+      setInvoiceDets([...invoiceDets, productSelected]);
+    }
   };
 
-  const [formData, setFormData] = useState({
-    invoiceId: '',
-    nit: '',
-    name: '',
-    date: '',
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      console.log("file:", file)
+      toBase64(file)
+        .then((result) => {
+          console.log("file:", result)
+          formData.fel_pdf_doc = result;
+          setSnackbarMessage('File converted to Base64');
+          setOpenSnackbar(true);
+        })
+        .catch((error) => {
+          setSnackbarMessage('Error converting file to Base64');
+          setOpenSnackbar(true);
+        });
+    }
+  };
+
+
+  const [formDataCreate, setFormDataCreate] = useState({
+    nit: formData.nit,
+    name: formData.nit,
+    date: getDate(),
     infile_detail: invoiceDets,
-    total: '',
+    total: total,
+    status: 'VIG',
   });
+
 
   const customStyles = {
     control: base => ({
@@ -86,16 +117,16 @@ const InvoiceUpdate = (props) => {
   const handleFormChange = (event) => {
 
     //TODO: get File from  somewhere 
-    /*
-    if (hay archivo) {
-    try {
-          const file = await toBase64(file);
-          formData.fel_pdf_doc = file
-      } catch(error) {
-          console.error(error);
+
+    if (file) {
+      try {
+        const filet = toBase64(file);
+        formData.fel_pdf_doc = filet
+      } catch (error) {
+        console.error(error);
       }
     }
-    */
+
 
 
 
@@ -124,6 +155,42 @@ const InvoiceUpdate = (props) => {
       setSnackbarMessage('Error updating invoice');
       setOpenSnackbar(true);
     }
+  };
+
+  const crearFactura = async () => {
+    try {
+      const response = await axios.post(`http://127.0.0.1:8000/invoices/create/`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setSnackbarMessage(response.data.message);
+      setOpenSnackbar(true);
+    } catch (error) {
+      setSnackbarMessage(error.message);
+      setOpenSnackbar(true);
+    }
+  };
+
+
+  const handleCantidadChange = (index, nuevaCantidad) => {
+    if (nuevaCantidad >= 0) {
+      const nuevosDetalles = [...invoiceDets];
+      nuevosDetalles[index].producto = nuevosDetalles[index].label;
+      nuevosDetalles[index].cantidad = nuevaCantidad;
+      nuevosDetalles[index].quantity = nuevaCantidad;
+
+      setInvoiceDets(nuevosDetalles);
+      recalcularSubtotal(nuevosDetalles);
+    }
+  };
+
+  const recalcularSubtotal = (detalles) => {
+    const nuevoTotal = detalles.reduce((total, producto) => {
+      return total + (producto.cantidad || 0) * producto.value;
+    }, 0);
+
+    setTotal(parseFloat(nuevoTotal.toFixed(2)));
   };
 
   return (
@@ -285,20 +352,41 @@ const InvoiceUpdate = (props) => {
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Descripción</th>
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Cantidad</th>
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Precio</th>
+                          <th style={{ fontSize: "1rem", textAlign: 'left' }}>Subtotal</th>
                         </tr>
                       </thead>
                       <br />
                       <TableBody>
+                        {
+                          invoiceData.infile_detail ?
+                            <>
+                              {invoiceData.infile_detail.map((product, index) => (
+                                <TableRow key={index}>
+                                  <TableCell>{product.label}</TableCell>
+                                  <TableCell>{product.category}</TableCell>
+                                  <TableCell>{product.descripcion}</TableCell>
+                                  <TableCell>{product.quantity}</TableCell>
+                                  <TableCell>Q.{parseFloat(product.price).toFixed(2)}</TableCell>
+                                  <TableCell>Q.{parseFloat((product.quantity || 0) * product.price).toFixed(2)}</TableCell>
+                                </TableRow>
+                              ))}
+                            </>
+                            :
+                            <>
+                              {productList.map((product, index) => (
+                                <TableRow key={index}>
+                                  <TableCell>{product.label}</TableCell>
+                                  <TableCell>{product.category}</TableCell>
+                                  <TableCell>{product.descripcion}</TableCell>
+                                  <TableCell>{product.quantity}</TableCell>
+                                  <TableCell>Q.{product.value}</TableCell>
+                                </TableRow>
+                              ))}
+                            </>
+                        }
 
-                        {productList.map((product, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{product.label}</TableCell>
-                            <TableCell>{product.category}</TableCell>
-                            <TableCell>{product.descripcion}</TableCell>
-                            <TableCell>{product.quantity}</TableCell>
-                            <TableCell>Q.{product.value}</TableCell>
-                          </TableRow>
-                        ))}
+
+
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -310,7 +398,7 @@ const InvoiceUpdate = (props) => {
 
 
                   <Typography variant="h3" align="right">
-                    Total: Q.{invoiceData.total}
+                    Total: Q.{parseFloat(invoiceData.total).toFixed(2)}
                   </Typography>
 
 
@@ -354,7 +442,16 @@ const InvoiceUpdate = (props) => {
                         fullWidth
                         margin="normal"
                       />
+                      <br />
+                      <br />
+                      <input
+
+                        id="file-input"
+                        type="file"
+                        onChange={handleFileChange}
+                      />
                     </div>
+
                   </div>
 
                   <br />
@@ -367,7 +464,7 @@ const InvoiceUpdate = (props) => {
                       options={productList}
                       styles={customStyles}
                       onChange={(e) => {
-
+                        setProductSelected(e)
                       }}
                     />
 
@@ -375,6 +472,9 @@ const InvoiceUpdate = (props) => {
                       variant="contained"
                       color="info"
                       style={{ marginLeft: '1.5vh', backgroundColor: '#1e88e5', color: 'white' }}
+                      onClick={() => {
+                        handleAgregarProducto()
+                      }}
                     >
                       Agregar Producto
                     </Button>
@@ -390,17 +490,25 @@ const InvoiceUpdate = (props) => {
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Descripción</th>
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Cantidad</th>
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Precio</th>
+                          <th style={{ fontSize: "1rem", textAlign: 'left' }}>Subtotal</th>
                         </tr>
                       </thead>
                       <br />
                       <TableBody>
-                        {productList.map((product, index) => (
+                        {invoiceDets.map((product, index) => (
                           <TableRow key={index}>
                             <TableCell>{product.label}</TableCell>
                             <TableCell>{product.category}</TableCell>
                             <TableCell>{product.descripcion}</TableCell>
-                            <TableCell>{product.quantity}</TableCell>
+                            <TableCell>
+                              <TextField
+                                type="number"
+                                value={product.cantidad || 0}
+                                onChange={(e) => handleCantidadChange(index, parseInt(e.target.value))}
+                              />
+                            </TableCell>
                             <TableCell>Q.{product.value}</TableCell>
+                            <TableCell>Q.{parseFloat((product.cantidad || 0) * product.value).toFixed(2)}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -412,11 +520,19 @@ const InvoiceUpdate = (props) => {
                   <hr />
 
 
-                  <Typography variant="h3" align="right">
-                    Total: Q.{invoiceData.total}
+                  <Typography variant="h4" align="right">
+                    Total: Q.{parseFloat(total).toFixed(2)}
                   </Typography>
 
-                  <Button type="submit" variant="contained" color="secondary" style={{ marginTop: '20px', backgroundColor: '#4CAF50', color: 'white' }}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginTop: '20px', backgroundColor: '#4CAF50', color: 'white' }}
+                    onClick={() => {
+                      console.log(formData)
+                      crearFactura()
+                    }}
+                  >
                     Crear Factura
                   </Button>
                 </form>

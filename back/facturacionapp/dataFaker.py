@@ -17,12 +17,17 @@ def generate_dataset_and_save(num_records=50000, output_json='output.json', outp
 
     for _ in range(num_records):
         num_details = random.randint(1, 5)
+        infile_details = generate_infile_details(num_details)
+
+        # Calcular el total sumando los subtotales
+        total = sum(detail['subtotal'] for detail in infile_details)
+
         record = {
             'nit': fake.random_int(min=100000000, max=999999999),
             'name': fake.company(),
             'date': fake.date_between(start_date='-365d', end_date='today').isoformat(),
-            'infile_detail': generate_infile_details(num_details),
-            'total': round(random.uniform(100.0, 10000.0), 2),
+            'infile_detail': infile_details,
+            'total': round(total, 2),
             'status': random.choice(STATUS_OPTIONS),  # Estado por defecto "VIG"
             'fel_pdf_doc': '',  # Dejando el campo fel_pdf_doc vacío
         }
@@ -49,6 +54,10 @@ def generate_infile_details(num_details):
             'quantity': random.randint(1, 100),
             'price': round(random.uniform(10.0, 100000.0), 2),
         }
+
+        # Ajuste para calcular el subtotal
+        detail['subtotal'] = round(detail['quantity'] * detail['price'], 2)
+
         details.append(detail)
 
     return details
@@ -61,4 +70,4 @@ if __name__ == "__main__":
     for i, record in enumerate(generated_data, start=1):
         print(f"Registro {i}: {record}")
 
-    print("Datos guardados en output.json y output.bson")
+    print("Datos guardados en data.json y data.bson")
