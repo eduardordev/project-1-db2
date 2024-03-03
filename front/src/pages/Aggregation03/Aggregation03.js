@@ -13,7 +13,11 @@ function Aggregation03() {
     const fetchData = async () => {
         try {
             const response = await axios.get('http://localhost:8000/invoices/average_price_per_category/');
-            setData(response.data);
+            const formattedData = response.data.map(item => ({
+                ...item,
+                average_price: parseFloat(item.average_price).toFixed(2)
+            }));
+            setData(formattedData);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
