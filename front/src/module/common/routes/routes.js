@@ -88,7 +88,7 @@ const routes = [
       {
         name: "Agregacion 2",
         key: "aggregation02",
-        route: LINKS.aggregation01,
+        route: LINKS.aggregation02,
       },
 
     ],
