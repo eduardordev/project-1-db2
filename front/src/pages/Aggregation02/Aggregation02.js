@@ -22,13 +22,13 @@ function Aggregation02() {
     return (
         <div>
             <Typography variant="h4" gutterBottom>
-                Top Customers by Total Spent
+                Top de Clientes por Total Gastado
             </Typography>
             <DataTable
                 table={{
                     columns: [
-                        { Header: "Name", accessor: "_id", width: "50%" },
-                        { Header: "Total Spent", accessor: "total_spent" },
+                        { Header: "Nombre", accessor: "_id", width: "50%" },
+                        { Header: "Total Gastado", accessor: "total_spent" },
                     ],
                     rows: data
                 }}

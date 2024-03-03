@@ -26,13 +26,13 @@ function Aggregation03() {
     return (
         <div>
             <Typography variant="h4" gutterBottom>
-                Average Price per Category
+                Precio Promedio por Categoría
             </Typography>
             <DataTable
                 table={{
                     columns: [
-                        { Header: "Category", accessor: "category", width: "50%" },
-                        { Header: "Average Price", accessor: "average_price" },
+                        { Header: "Categoría", accessor: "category", width: "50%" },
+                        { Header: "Precio Promedio", accessor: "average_price" },
                     ],
                     rows: data
                 }}

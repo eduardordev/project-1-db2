@@ -29,10 +29,10 @@ function Aggregation04() {
     return (
         <div>
             <Typography variant="h4" gutterBottom>
-                Units Sold from Category
+                Unidades Vendidas por Categoría
             </Typography>
             <div>
-                <label htmlFor="category">Select Category:</label>
+                <label htmlFor="category">Seleccionar Categoría:</label>
                 <select id="category" value={selectedCategory} onChange={handleCategoryChange} style={{ fontSize: '16px', marginLeft: '10px', padding: '2px' }}>
                     <option value="Electronicos">Electronicos</option>
                     <option value="Computo">Computo</option>
@@ -45,8 +45,8 @@ function Aggregation04() {
                 <DataTable
                     table={{
                         columns: [
-                            { Header: "Category", accessor: "category", width: "50%" },
-                            { Header: "Units Sold", accessor: "units_sold" },
+                            { Header: "Categoría", accessor: "category", width: "50%" },
+                            { Header: "Unidades Vendidas", accessor: "units_sold" },
                         ],
                         rows: data
                     }}
