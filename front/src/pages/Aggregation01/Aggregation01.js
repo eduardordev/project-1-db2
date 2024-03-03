@@ -31,7 +31,7 @@ function Aggregation01() {
     return (
         <div>
             <Typography variant="h4" gutterBottom>
-                Ventas mensuales por año
+                Monthly Sales per Year
             </Typography>
             <div>
                 <label htmlFor="year">Select Year:</label>
