@@ -31,10 +31,10 @@ function Aggregation01() {
     return (
         <div>
             <Typography variant="h4" gutterBottom>
-                Monthly Sales per Year
+                Ventas Mensuales por Año
             </Typography>
             <div>
-                <label htmlFor="year">Select Year:</label>
+                <label htmlFor="year">Seleccionar Año:</label>
                 <select id="year" value={selectedYear} onChange={handleYearChange} style={{ fontSize: '16px', marginLeft: '10px', padding: '2px' }}>
                     <option value="2022">2022</option>
                     <option value="2023">2023</option>
@@ -46,15 +46,15 @@ function Aggregation01() {
                 <DataTable
                     table={{
                         columns: [
-                            { Header: "year", accessor: "year", width: "25%" },
-                            { Header: "month", accessor: "month", width: "30%" },
-                            { Header: "sales", accessor: "sales" },
+                            { Header: "año", accessor: "year", width: "25%" },
+                            { Header: "mes", accessor: "month", width: "30%" },
+                            { Header: "ventas", accessor: "sales" },
                         ],
                         rows: data
                     }}
                 />
             ) : (
-                <Typography variant="body1">No data available for the selected year.</Typography>
+                <Typography variant="body1">No hay datos disponibles para el año seleccionado.</Typography>
             )}
         </div>
     );
