@@ -8,4 +8,5 @@ export const LINKS = {
   invoices_delete : "/invoices/delete/",
   aggregation01: "/aggregation01/view/",
   aggregation02: "/aggregation02/view/",
+  aggregation03: "/aggregation03/view/",
 };
