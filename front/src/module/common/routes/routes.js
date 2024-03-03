@@ -95,6 +95,11 @@ const routes = [
         key: "aggregation03",
         route: LINKS.aggregation03,
       },
+      {
+        name: "Agregacion 4",
+        key: "aggregation04",
+        route: LINKS.aggregation04,
+      },
 
     ],
   },

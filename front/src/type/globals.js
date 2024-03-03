@@ -9,4 +9,5 @@ export const LINKS = {
   aggregation01: "/aggregation01/view/",
   aggregation02: "/aggregation02/view/",
   aggregation03: "/aggregation03/view/",
+  aggregation04: "/aggregation04/view/",
 };

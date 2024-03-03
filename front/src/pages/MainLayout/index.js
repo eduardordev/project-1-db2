@@ -42,6 +42,7 @@ import Invoice from "../Invoices/Invoice";
 import Aggregation01 from "../Aggregation01/Aggregation01";
 import Aggregation02 from "../Aggregation02/Aggregation02";
 import Aggregation03 from "../Aggregation03/Aggregation03";
+import Aggregation04 from "../Aggregation04/Aggregation04";
 
 const MainLayout = () => {
 
@@ -179,6 +180,7 @@ const MainLayout = () => {
             <Route path="/aggregation01/view/" element={<Aggregation01 action="view" />} />
             <Route path="/aggregation02/view/" element={<Aggregation02 action="view" />} />
             <Route path="/aggregation03/view/" element={<Aggregation03 action="view" />} />
+            <Route path="/aggregation04/view/" element={<Aggregation04 action="view" />} />
 
         </Routes>
       </MDBox>
