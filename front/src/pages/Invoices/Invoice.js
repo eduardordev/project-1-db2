@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { getInvoice } from '../../Services/ClientService.js';
 import { Typography, Container, Paper, TextField, Button, Snackbar } from "@mui/material";
 import { Table, TableBody, TableCell, TableRow, TableContainer } from "@mui/material";
@@ -6,7 +6,6 @@ import MuiAlert from '@mui/material/Alert';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Select from 'react-select'
-import { blue } from "@mui/material/colors";
 import { productList } from './products.js'
 
 const toBase64 = file => new Promise((resolve, reject) => {
@@ -34,7 +33,9 @@ const InvoiceUpdate = (props) => {
   const [name, setName] = useState();
   const [productSelected, setProductSelected] = useState({});
   const [total, setTotal] = useState(0.00)
+  const [totalActualizado, setTotalActualizado] = useState(0.00)
   const [file, setFile] = useState([]);
+  const [infileDetailList, setInfileDetailList] = useState([]);
 
   const [formData, setFormData] = useState({
     nit: nit,
@@ -46,7 +47,7 @@ const InvoiceUpdate = (props) => {
     fel_pdf_doc: "",
   });
 
-
+  
 
   useEffect(() => {
     setFormData({
@@ -54,23 +55,75 @@ const InvoiceUpdate = (props) => {
       infile_detail: invoiceDets,
       total: total,
     });
-    if (props.action === 'update' || props.action === "view") {
+
+    setFormDataUpdate({
+      ...formDataUpdate,
+      nit: nit,
+      name: name,
+      infile_detail: infileDetailList,
+      total: total,
+    })
+
+    // Solo realizar la carga inicial si no estás en modo de actualización
+    if (props.action === 'update' || props.action === 'view'){
       getInvoice(id)
         .then((response) => {
-          console.log(response.data)
-          setInvoiceData(response.data)
-        }).catch((error) => {
+          setInvoiceData(response.data);
+        })
+        .catch((error) => {
           console.error(error);
         });
     }
-  }, [id, invoiceDets]);
+
+    
+  }, [id, invoiceDets, infileDetailList.length, props.action]);
 
 
   const handleAgregarProducto = () => {
     if (productSelected) {
-      setInvoiceDets([...invoiceDets, productSelected]);
+
+      const newProduct = {
+        producto: productSelected.label,
+        category: productSelected.category,
+        descripcion: productSelected.descripcion,
+        quantity: 0,
+        price: productSelected.value,
+      };
+
+
+      setInvoiceDets([...invoiceDets, newProduct]);
+
+
+      setInfileDetailList([...infileDetailList, newProduct]);
+      console.log(infileDetailList)
     }
   };
+
+  const [formDataUpdate, setFormDataUpdate] = useState({
+    id: id,
+    nit: nit,
+    name: name,
+    date: getDate(),
+    infile_detail: infileDetailList,
+    total: total,
+    status: 'VIG',
+    fel_pdf_doc: invoiceData.fel_pdf_doc,
+  });
+
+
+  const handleEliminarProducto = (index) => {
+
+    const updatedInvoiceDets = [...invoiceDets];
+    updatedInvoiceDets.splice(index, 1);
+    setInvoiceDets(updatedInvoiceDets);
+
+
+    const updatedList = [...infileDetailList];
+    updatedList.splice(index, 1);
+    setInfileDetailList(updatedList);
+  };
+
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -92,14 +145,7 @@ const InvoiceUpdate = (props) => {
   };
 
 
-  const [formDataCreate, setFormDataCreate] = useState({
-    nit: formData.nit,
-    name: formData.nit,
-    date: getDate(),
-    infile_detail: invoiceDets,
-    total: total,
-    status: 'VIG',
-  });
+  
 
 
   const customStyles = {
@@ -143,19 +189,37 @@ const InvoiceUpdate = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const formData = new FormData();
+    formData.append('nit', formDataUpdate.nit);
+    formData.append('name', formDataUpdate.name);
+    formData.append('date', formDataUpdate.date);
+    formData.append('total', formDataUpdate.total);
+    formData.append('status', formDataUpdate.status);
+    formData.append('fel_pdf_doc', invoiceData.fel_pdf_doc[0].file_id);
+    console.log(invoiceData.fel_pdf_doc);
+
+    formDataUpdate.infile_detail.forEach((detail, index) => {
+        formData.append(`infile_detail[${index}][producto]`, detail.producto);
+        formData.append(`infile_detail[${index}][descripcion]`, detail.descripcion);
+        formData.append(`infile_detail[${index}][category]`, detail.category);
+        formData.append(`infile_detail[${index}][quantity]`, detail.quantity);
+        formData.append(`infile_detail[${index}][price]`, detail.price);
+    });
+
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/invoices/${formData.invoiceId}/update/`, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      setSnackbarMessage(response.data.message);
-      setOpenSnackbar(true);
+        const response = await axios.post(`http://127.0.0.1:8000/invoices/${formDataUpdate.id}/update/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        setSnackbarMessage(response.data.message);
+        setOpenSnackbar(true);
     } catch (error) {
-      setSnackbarMessage('Error updating invoice');
-      setOpenSnackbar(true);
+        setSnackbarMessage('Error updating invoice');
+        setOpenSnackbar(true);
     }
-  };
+};
+
 
   const crearFactura = async () => {
     try {
@@ -176,21 +240,38 @@ const InvoiceUpdate = (props) => {
   const handleCantidadChange = (index, nuevaCantidad) => {
     if (nuevaCantidad >= 0) {
       const nuevosDetalles = [...invoiceDets];
-      nuevosDetalles[index].producto = nuevosDetalles[index].label;
-      nuevosDetalles[index].cantidad = nuevaCantidad;
       nuevosDetalles[index].quantity = nuevaCantidad;
 
       setInvoiceDets(nuevosDetalles);
       recalcularSubtotal(nuevosDetalles);
+
+      const updatedList = [...infileDetailList];
+      updatedList[index].quantity = nuevaCantidad;
+      setInfileDetailList(updatedList);
     }
   };
 
+  const handleCantidadChangeUpdated = (index, nuevaCantidad) => {
+    if (nuevaCantidad >= 0) {
+
+      const updatedList = [...infileDetailList];
+      updatedList[index].quantity = nuevaCantidad;
+      setInfileDetailList(updatedList);
+      recalcularSubtotal(updatedList);
+    }
+  };
+
+
+
   const recalcularSubtotal = (detalles) => {
     const nuevoTotal = detalles.reduce((total, producto) => {
-      return total + (producto.cantidad || 0) * producto.value;
+      return total + (producto.quantity || 0) * producto.price;
     }, 0);
 
     setTotal(parseFloat(nuevoTotal.toFixed(2)));
+    console.log("nuevototal: "+ nuevoTotal)
+    setTotalActualizado(nuevoTotal);
+    console.log("actualizado: "+ totalActualizado)
   };
 
   return (
@@ -210,13 +291,13 @@ const InvoiceUpdate = (props) => {
                     <Typography variant="h6" align="left">
                       No. Factura: <span style={{ color: 'red' }}>{invoiceData.id}</span>
                     </Typography>
-                    <br />
 
                     {/* Other input fields */}
+
                     <TextField
-                      label="Nit"
+                      label="NIT"
                       name="nit"
-                      value={formData.nit}
+                      value={invoiceData.nit}
                       onChange={handleFormChange}
                       fullWidth
                       margin="normal"
@@ -224,7 +305,7 @@ const InvoiceUpdate = (props) => {
                     <TextField
                       label="Name"
                       name="name"
-                      value={formData.name}
+                      value={invoiceData.name}
                       onChange={handleFormChange}
                       fullWidth
                       margin="normal"
@@ -252,19 +333,36 @@ const InvoiceUpdate = (props) => {
                     options={productList}
                     styles={customStyles}
                     onChange={(e) => {
-
+                      setProductSelected(e)
                     }}
                   />
+                  <Button
+                    variant="contained"
+                    color="info"
+                    style={{ marginLeft: '1.5vh', backgroundColor: '#1e88e5', color: 'white' }}
+                    onClick={() => {
+                      setInfileDetailList(invoiceData.infile_detail);
+                      setTotal(invoiceData.total);
+                      setName(invoiceData.name);
+                      setNit(invoiceData.nit);
+                    }}
+                  >
+                    Obtener Productos
+                  </Button>
 
                   <Button
                     variant="contained"
                     color="info"
                     style={{ marginLeft: '1.5vh', backgroundColor: '#1e88e5', color: 'white' }}
+                    onClick={() => {
+                      handleAgregarProducto()
+                    }}
                   >
                     Agregar Producto
                   </Button>
                 </div>
                 <br />
+
                 <TableContainer>
                   <Table>
                     <thead>
@@ -274,29 +372,49 @@ const InvoiceUpdate = (props) => {
                         <th style={{ fontSize: "1rem", textAlign: 'left' }}>Descripción</th>
                         <th style={{ fontSize: "1rem", textAlign: 'left' }}>Cantidad</th>
                         <th style={{ fontSize: "1rem", textAlign: 'left' }}>Precio</th>
+                        <th style={{ fontSize: "1rem", textAlign: 'left' }}>Subtotal</th>
+                        <th style={{ fontSize: "1rem", textAlign: 'left' }}>Acciones</th>
                       </tr>
                     </thead>
                     <br />
                     <TableBody>
-                      {productList.map((product, index) => (
+                      {infileDetailList.map((product, index) => (
                         <TableRow key={index}>
-                          <TableCell>{product.label}</TableCell>
+                          <TableCell>{product.producto}</TableCell>
                           <TableCell>{product.category}</TableCell>
                           <TableCell>{product.descripcion}</TableCell>
-                          <TableCell>{product.quantity}</TableCell>
-                          <TableCell>Q.{product.value}</TableCell>
+                          <TableCell>
+                            <TextField
+                              type="number"
+                              value={product.quantity || 0}
+                              onChange={(e) => handleCantidadChangeUpdated(index, parseInt(e.target.value))}
+                            />
+                          </TableCell>
+                          <TableCell>Q.{product.price}</TableCell>
+                          <TableCell>Q.{parseFloat((product.quantity || 0) * product.price).toFixed(2)}</TableCell>
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              style={{ backgroundColor: '#e53935', color: 'white' }}
+                              onClick={() => handleEliminarProducto(index)}
+                            >
+                              Eliminar
+                            </Button>
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
 
+
                 <br />
                 <hr />
 
 
-                <Typography variant="h3" align="right">
-                  Total: Q.{invoiceData.total}
+                <Typography variant="h4" align="right">
+                  Total: Q.{parseFloat(total).toFixed(2)}
                 </Typography>
 
                 <Button type="submit" variant="contained" color="secondary" style={{ marginTop: '20px', backgroundColor: '#4CAF50', color: 'white' }}>
@@ -362,7 +480,7 @@ const InvoiceUpdate = (props) => {
                             <>
                               {invoiceData.infile_detail.map((product, index) => (
                                 <TableRow key={index}>
-                                  <TableCell>{product.label}</TableCell>
+                                  <TableCell>{product.producto}</TableCell>
                                   <TableCell>{product.category}</TableCell>
                                   <TableCell>{product.descripcion}</TableCell>
                                   <TableCell>{product.quantity}</TableCell>
@@ -491,24 +609,35 @@ const InvoiceUpdate = (props) => {
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Cantidad</th>
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Precio</th>
                           <th style={{ fontSize: "1rem", textAlign: 'left' }}>Subtotal</th>
+                          <th style={{ fontSize: "1rem", textAlign: 'left' }}>Acciones</th>
                         </tr>
                       </thead>
                       <br />
                       <TableBody>
                         {invoiceDets.map((product, index) => (
                           <TableRow key={index}>
-                            <TableCell>{product.label}</TableCell>
+                            <TableCell>{product.producto}</TableCell>
                             <TableCell>{product.category}</TableCell>
                             <TableCell>{product.descripcion}</TableCell>
                             <TableCell>
                               <TextField
                                 type="number"
-                                value={product.cantidad || 0}
+                                value={product.quantity || 0}
                                 onChange={(e) => handleCantidadChange(index, parseInt(e.target.value))}
                               />
                             </TableCell>
-                            <TableCell>Q.{product.value}</TableCell>
-                            <TableCell>Q.{parseFloat((product.cantidad || 0) * product.value).toFixed(2)}</TableCell>
+                            <TableCell>Q.{product.price}</TableCell>
+                            <TableCell>Q.{parseFloat((product.quantity || 0) * product.price).toFixed(2)}</TableCell>
+                            <TableCell>
+                              <Button
+                                variant="contained"
+                                color="error"
+                                style={{ backgroundColor: '#e53935', color: 'white' }}
+                                onClick={() => handleEliminarProducto(index)}
+                              >
+                                Eliminar
+                              </Button>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

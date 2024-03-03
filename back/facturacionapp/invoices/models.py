@@ -44,7 +44,7 @@ class Invoices(models.Model):
                     "descripcion": detail.get("descripcion"),
                     "category": detail.get("category"),
                     "quantity": detail.get("quantity"),
-                    "price": str(detail.get("value")),
+                    "price": str(detail.get("price")),
                 } for detail in self.infile_detail
             ],
             'total': str(self.total),
