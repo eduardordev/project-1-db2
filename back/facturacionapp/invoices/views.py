@@ -14,6 +14,8 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadReque
 
 from gridfs import GridFS, NoFile
 
+from bson import ObjectId  # Import ObjectId from bson
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
@@ -150,7 +152,7 @@ def get_invoice(request, pk):
 def update_invoice(request, pk):
     if request.method == "POST":
         try:
-            
+            pk = ObjectId(pk)
             nit = request.POST.get("nit")
             name = request.POST.get("name")
             date = request.POST.get("date")
