@@ -193,6 +193,7 @@ def update_invoice(request, pk):
 @require_POST
 def delete_invoice(request, pk):
     try:
+        pk = ObjectId(pk)
         invoice_collection.delete_one({"_id": pk})
         return JsonResponse({"message": "Factura eliminada exitosamente"}, status=204)
     except Invoices.DoesNotExist:
