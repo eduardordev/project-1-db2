@@ -54,6 +54,7 @@ urlpatterns = [
     path('get_file', get_file, name='get_file'),
 
     # Bulk anular
-    path('bulk_anular_facturas/', bulk_anular_facturas, name='bulk_anular_facturas')
+    path('bulk_anular_facturas/', bulk_anular_facturas,
+         name='bulk_anular_facturas')
 
 ]

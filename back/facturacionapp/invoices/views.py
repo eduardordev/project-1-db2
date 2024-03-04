@@ -181,8 +181,10 @@ def update_invoice(request, pk):
             }
         }
 
+        object_id = ObjectId(pk)
+
         # Updating the invoice in the database.
-        invoice_collection.update_one({'_id': pk}, update_data)
+        invoice_collection.update_one({'_id': object_id}, update_data)
 
         return JsonResponse({"message": "Factura actualizada exitosamente"})
     except Exception as e:
